@@ -1,0 +1,14 @@
+---
+- hosts: xmpp-server
+  sudo: yes
+  
+  tasks:
+    - name: Install 'prosody'
+      apt: name=prosody state=present
+  
+    - name: Register users
+      shell: prosodyctl register {{ item.name }} localhost {{ item.password }}
+      with_items:
+        - { name: 'sniper',               password: 'sniper' }
+        - { name: 'auction-item-54321',   password: 'auction' }
+        - { name: 'auction-item-65432',   password: 'auction' }
