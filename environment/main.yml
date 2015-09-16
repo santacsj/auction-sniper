@@ -5,16 +5,22 @@
   tasks:
     - name: install 'prosody'
       apt: name=prosody state=present
-  
+    
+    - name: disable store offile messages
+      lineinfile: dest=/etc/prosody/prosody.cfg.lua regexp='^(.*)-- (\"offline\";.*)$' line='\1\2' backrefs=yes
+    
+    - name: set resource policy 'Never kick'
+      lineinfile: dest=/etc/prosody/conf.d/localhost.cfg.lua line='conflict_resolve = "kick_new";'
+
+    - name: start 'prosody'
+      service: name=prosody state=started
+    
     - name: register users
       shell: prosodyctl register {{ item.name }} localhost {{ item.password }}
       with_items:
         - { name: 'sniper',               password: 'sniper' }
         - { name: 'auction-item-54321',   password: 'auction' }
         - { name: 'auction-item-65432',   password: 'auction' }
-      
-    - name: set resource policy 'Never kick'
-      lineinfile: dest=/etc/prosody/conf.d/localhost.cfg.lua line='conflict_resolve = "kick_new";'
       
     - name: restart 'prosody'
       service: name=prosody state=restarted
