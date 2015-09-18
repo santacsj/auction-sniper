@@ -7,7 +7,6 @@ public class ApplicationRunner extends ExternalResource {
 
     public static final String SNIPER_ID = "sniper";
     public static final String SNIPER_PASSWORD = "sniper";
-    public static final String XMPP_HOSTNAME = "localhost";
 
     private static final String STATUS_LOST = "Lost";
     private static final String STATUS_JOINING = "Joining";
@@ -19,7 +18,8 @@ public class ApplicationRunner extends ExternalResource {
             @Override
             public void run() {
                 try {
-                    Main.main(XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.getItemId());
+                    Main.main(FakeAuctionServer.XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD,
+                            auction.getItemId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
