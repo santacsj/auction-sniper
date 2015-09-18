@@ -6,7 +6,7 @@
     - name: install 'prosody'
       apt: name=prosody state=present
     
-    - name: disable store offile messages
+    - name: disable 'store offile messages'
       lineinfile: dest=/etc/prosody/prosody.cfg.lua regexp='^(.*)-- (\"offline\";.*)$' line='\1\2' backrefs=yes
     
     - name: set resource policy 'Never kick'
