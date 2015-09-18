@@ -1,3 +1,4 @@
+# This playbook sets up a development environment
 ---
 - hosts: xmpp-server
   sudo: yes
