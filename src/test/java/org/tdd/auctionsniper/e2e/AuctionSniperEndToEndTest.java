@@ -8,8 +8,9 @@ import org.tdd.auctionsniper.support.FakeAuctionServer;
 public class AuctionSniperEndToEndTest {
 
     @Rule
+    public final FakeAuctionServer auction = new FakeAuctionServer("item-54321");
+    @Rule
     public final ApplicationRunner application = new ApplicationRunner();
-    private final FakeAuctionServer auction = new FakeAuctionServer("item-54321");
 
     @Test
     public void sniperJoinsAuctionUntilAuctionCloses() throws Exception {

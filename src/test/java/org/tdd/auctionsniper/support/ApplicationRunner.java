@@ -1,5 +1,7 @@
 package org.tdd.auctionsniper.support;
 
+import static org.tdd.auctionsniper.support.FakeAuctionServer.*;
+
 import org.junit.rules.ExternalResource;
 import org.tdd.auctionsniper.Main;
 
@@ -18,8 +20,7 @@ public class ApplicationRunner extends ExternalResource {
             @Override
             public void run() {
                 try {
-                    Main.main(FakeAuctionServer.XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD,
-                            auction.getItemId());
+                    Main.main(XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.getItemId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
