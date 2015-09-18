@@ -4,7 +4,7 @@ import org.junit.rules.ExternalResource;
 
 public class FakeAuctionServer extends ExternalResource {
 
-    public FakeAuctionServer(String string) {
+    public FakeAuctionServer(String itemId) {
         // TODO Auto-generated constructor stub
     }
 
@@ -21,6 +21,11 @@ public class FakeAuctionServer extends ExternalResource {
     public void announceClosed() {
         // TODO Auto-generated method stub
 
+    }
+
+    public String getItemId() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
