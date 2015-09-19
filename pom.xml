@@ -64,7 +64,7 @@
 				<version>1.4.0</version>
 				<executions>
 					<execution>
-						<id>vagrant-up</id>
+						<id>setUp-it-environment</id>
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>exec</goal>
@@ -77,7 +77,7 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>vagrant-destroy</id>
+						<id>tearDown-it-environment</id>
 						<phase>post-integration-test</phase>
 						<goals>
 							<goal>exec</goal>
