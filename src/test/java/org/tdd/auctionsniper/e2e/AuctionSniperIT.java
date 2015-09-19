@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.tdd.auctionsniper.support.ApplicationRunner;
 import org.tdd.auctionsniper.support.FakeAuctionServer;
 
-public class AuctionSniperEndToEndTest {
+public class AuctionSniperIT {
 
     @Rule
     public final FakeAuctionServer auction = new FakeAuctionServer("item-54321");
