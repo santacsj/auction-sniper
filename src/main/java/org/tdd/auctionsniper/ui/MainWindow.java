@@ -7,12 +7,13 @@ import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 
 import org.tdd.auctionsniper.Main;
-import org.tdd.auctionsniper.support.ApplicationRunner;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
     public static final String SNIPER_STATUS_NAME = "sniper status";
-    private final JLabel sniperStatus = createLabel(ApplicationRunner.STATUS_JOINING);
+    private final JLabel sniperStatus = createLabel(MainWindow.STATUS_JOINING);
+    public static final String STATUS_JOINING = "Joining";
+    public static final String STATUS_LOST = "Lost";
 
     public MainWindow() {
         super("Auction Sniper");
@@ -28,6 +29,10 @@ public class MainWindow extends JFrame {
         result.setName(SNIPER_STATUS_NAME);
         result.setBorder(new LineBorder(Color.BLACK));
         return result;
+    }
+
+    public void showStatus(String statusLost) {
+        // TODO Auto-generated method stub
     }
 
 }

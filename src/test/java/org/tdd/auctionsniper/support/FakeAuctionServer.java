@@ -35,7 +35,6 @@ public class FakeAuctionServer extends ExternalResource {
 
     public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
         messageListener.receivesAMessage();
-
     }
 
     public void announceClosed() throws XMPPException {

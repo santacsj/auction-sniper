@@ -4,14 +4,12 @@ import static org.tdd.auctionsniper.support.FakeAuctionServer.*;
 
 import org.junit.rules.ExternalResource;
 import org.tdd.auctionsniper.Main;
+import org.tdd.auctionsniper.ui.MainWindow;
 
 public class ApplicationRunner extends ExternalResource {
 
     public static final String SNIPER_ID = "sniper";
     public static final String SNIPER_PASSWORD = "sniper";
-
-    public static final String STATUS_LOST = "Lost";
-    public static final String STATUS_JOINING = "Joining";
 
     private AuctionSniperDriver driver;
 
@@ -29,11 +27,11 @@ public class ApplicationRunner extends ExternalResource {
         thread.setDaemon(true);
         thread.start();
         driver = new AuctionSniperDriver(1000);
-        driver.showsSniperStatus(STATUS_JOINING);
+        driver.showsSniperStatus(MainWindow.STATUS_JOINING);
     }
 
     public void showsSniperHasLostAuction() {
-        driver.showsSniperStatus(STATUS_LOST);
+        driver.showsSniperStatus(MainWindow.STATUS_LOST);
     }
 
     public void stop() {

@@ -41,9 +41,20 @@ public class Main {
     }
 
     private MainWindow ui;
+    @SuppressWarnings("unused")
+    private Chat notToBeGCd;
 
     public Main() throws Exception {
         startUserInterface();
+    }
+
+    private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+        Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection),
+                (aChat, message) -> {
+                    SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
+                });
+        notToBeGCd = chat;
+        chat.sendMessage(new Message());
     }
 
     private void startUserInterface() throws Exception {
