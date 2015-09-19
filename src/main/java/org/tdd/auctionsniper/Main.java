@@ -11,8 +11,7 @@ public class Main {
 
     public static void main(String xmppHostname, String sniperId, String sniperPassword,
             String itemId) throws Exception {
-        // TODO Auto-generated method stub
-
+        Main main = new Main();
     }
 
     public static void main(String[] args) throws Exception {

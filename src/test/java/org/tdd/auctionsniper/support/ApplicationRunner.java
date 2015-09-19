@@ -29,11 +29,11 @@ public class ApplicationRunner extends ExternalResource {
         thread.setDaemon(true);
         thread.start();
         driver = new AuctionSniperDriver(1000);
-        driver.showsSniperStatus(STATUS_LOST);
+        driver.showsSniperStatus(STATUS_JOINING);
     }
 
     public void showsSniperHasLostAuction() {
-        driver.showsSniperStatus(STATUS_JOINING);
+        driver.showsSniperStatus(STATUS_LOST);
     }
 
     public void stop() {
