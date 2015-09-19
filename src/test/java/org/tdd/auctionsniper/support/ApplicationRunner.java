@@ -10,8 +10,8 @@ public class ApplicationRunner extends ExternalResource {
     public static final String SNIPER_ID = "sniper";
     public static final String SNIPER_PASSWORD = "sniper";
 
-    private static final String STATUS_LOST = "Lost";
-    private static final String STATUS_JOINING = "Joining";
+    public static final String STATUS_LOST = "Lost";
+    public static final String STATUS_JOINING = "Joining";
 
     private AuctionSniperDriver driver;
 

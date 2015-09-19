@@ -2,6 +2,7 @@ package org.tdd.auctionsniper.support;
 
 import org.hamcrest.Matchers;
 import org.tdd.auctionsniper.Main;
+import org.tdd.auctionsniper.ui.MainWindow;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
@@ -17,8 +18,8 @@ public class AuctionSniperDriver extends JFrameDriver {
     }
 
     public void showsSniperStatus(String statusText) {
-        new JLabelDriver(this, named(Main.SNIPER_STATUS_NAME))
-                .hasText(Matchers.equalTo(statusText));
+        new JLabelDriver(this, named(MainWindow.SNIPER_STATUS_NAME)).hasText(Matchers
+                .equalTo(statusText));
 
     }
 
