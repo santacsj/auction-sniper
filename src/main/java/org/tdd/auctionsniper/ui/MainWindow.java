@@ -31,8 +31,8 @@ public class MainWindow extends JFrame {
         return result;
     }
 
-    public void showStatus(String statusLost) {
-        // TODO Auto-generated method stub
+    public void showStatus(String status) {
+        sniperStatus.setText(status);
     }
 
 }
