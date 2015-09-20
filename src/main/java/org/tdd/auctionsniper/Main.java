@@ -3,7 +3,6 @@ package org.tdd.auctionsniper;
 import javax.swing.SwingUtilities;
 
 import org.jivesoftware.smack.*;
-import org.jivesoftware.smack.packet.Message;
 import org.tdd.auctionsniper.ui.MainWindow;
 
 public class Main {
@@ -53,7 +52,7 @@ public class Main {
                     SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
                 });
         notToBeGCd = chat;
-        chat.sendMessage(new Message());
+        chat.sendMessage(JOIN_COMMAND_FORMAT);
     }
 
     private void startUserInterface() throws Exception {
