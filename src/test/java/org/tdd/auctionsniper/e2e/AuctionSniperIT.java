@@ -16,7 +16,7 @@ public class AuctionSniperIT {
     public void sniperJoinsAuctionUntilAuctionCloses() throws Exception {
         auction.startSellingItem();
         application.startBiddingIn(auction);
-        auction.hasReceivedJoinRequestFromSniper();
+        auction.hasReceivedJoinRequestFrom(null);
         auction.announceClosed();
         application.showsSniperHasLostAuction();
     }
@@ -26,7 +26,7 @@ public class AuctionSniperIT {
         auction.startSellingItem();
 
         application.startBiddingIn(auction);
-        auction.hasReceivedJoinRequestFromSniper();
+        auction.hasReceivedJoinRequestFrom(null);
 
         auction.reportPrice(1000, 98, "other bidder");
         application.hasShownSniperIsBidding();

@@ -3,10 +3,12 @@ package org.tdd.auctionsniper.support;
 import static java.lang.String.*;
 import static org.hamcrest.Matchers.*;
 
+import org.hamcrest.Matcher;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Message;
 import org.junit.Assert;
 import org.junit.rules.ExternalResource;
+import org.tdd.auctionsniper.Main;
 
 public class FakeAuctionServer extends ExternalResource {
 
@@ -35,8 +37,8 @@ public class FakeAuctionServer extends ExternalResource {
         });
     }
 
-    public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-        messageListener.receivesAMessage(is(anything()));
+    public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException {
+        receivesAMessageMatching(sniperId, equalTo(Main.JOIN_COMMAND_FORMAT));
     }
 
     public void announceClosed() throws XMPPException {
@@ -49,10 +51,13 @@ public class FakeAuctionServer extends ExternalResource {
     }
 
     public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
-        Assert.assertThat(currentChat.getParticipant(), equalTo(sniperId));
-        messageListener.receivesAMessage(equalTo(String.format(
-                "SOLVersion: 1.1; Command: BID; Price: %d;", bid)));
+        receivesAMessageMatching(sniperId, equalTo(String.format(Main.BID_COMMAND_FORMAT, bid)));
+    }
 
+    private void receivesAMessageMatching(String sniperId, Matcher<? super String> messageMatcher)
+            throws InterruptedException {
+        messageListener.receivesAMessage(messageMatcher);
+        Assert.assertThat(currentChat.getParticipant(), equalTo(sniperId));
     }
 
     public void stop() {
