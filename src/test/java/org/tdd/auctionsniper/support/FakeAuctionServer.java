@@ -41,6 +41,16 @@ public class FakeAuctionServer extends ExternalResource {
         currentChat.sendMessage(new Message());
     }
 
+    public void reportPrice(int price, int increment, String id) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void hasReceivedBid(int price, String id) {
+        // TODO Auto-generated method stub
+
+    }
+
     public void stop() {
         connection.disconnect();
     }
