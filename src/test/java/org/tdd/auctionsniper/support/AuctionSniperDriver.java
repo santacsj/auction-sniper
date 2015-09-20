@@ -24,8 +24,7 @@ public class AuctionSniperDriver extends JFrameDriver {
     }
 
     public void dispose() {
-        // TODO Auto-generated method stub
-
+        component().component().dispose();
     }
 
 }

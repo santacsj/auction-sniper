@@ -10,6 +10,8 @@ public class ApplicationRunner extends ExternalResource {
 
     public static final String SNIPER_ID = "sniper";
     public static final String SNIPER_PASSWORD = "sniper";
+    public static final String SNIPER_XMPP_ID = SNIPER_ID + "@" + FakeAuctionServer.XMPP_HOSTNAME
+            + "/" + FakeAuctionServer.AUCTION_RESOURCE;
 
     private AuctionSniperDriver driver;
 
@@ -32,6 +34,10 @@ public class ApplicationRunner extends ExternalResource {
 
     public void showsSniperHasLostAuction() {
         driver.showsSniperStatus(MainWindow.STATUS_LOST);
+    }
+
+    public void hasShownSniperIsBidding() {
+        driver.showsSniperStatus(MainWindow.STATUS_BIDDING);
     }
 
     public void stop() {
