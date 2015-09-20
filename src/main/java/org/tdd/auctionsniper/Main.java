@@ -8,7 +8,8 @@ import javax.swing.SwingUtilities;
 import org.jivesoftware.smack.*;
 import org.tdd.auctionsniper.ui.MainWindow;
 
-public class Main {
+public class Main implements AuctionEventListener {
+
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
     private static final int ARG_PASSWORD = 2;
@@ -52,9 +53,7 @@ public class Main {
     private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
         disconnectWhenUICloses(connection);
         Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection),
-                (aChat, message) -> {
-                    SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-                });
+                new AuctionMessageTranslator(this));
         notToBeGCd = chat;
         chat.sendMessage(JOIN_COMMAND_FORMAT);
     }
@@ -71,4 +70,10 @@ public class Main {
     private void startUserInterface() throws Exception {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
     }
+
+    @Override
+    public void auctionClosed() {
+        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
+    }
+
 }
