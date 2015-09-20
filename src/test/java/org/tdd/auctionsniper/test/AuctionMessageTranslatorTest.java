@@ -17,7 +17,7 @@ public class AuctionMessageTranslatorTest {
     public final JUnitRuleMockery context = new JUnitRuleMockery();
 
     private final AuctionEventListener listener = context.mock(AuctionEventListener.class);
-    private final AuctionMessageTranslator translator = new AuctionMessageTranslator();
+    private final AuctionMessageTranslator translator = new AuctionMessageTranslator(listener);
 
     @Test
     public void notifiesAuctionClosedWhenCloseMessageReceived() {
