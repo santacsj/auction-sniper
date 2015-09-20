@@ -1,9 +1,11 @@
 package org.tdd.auctionsniper.support;
 
 import static java.lang.String.*;
+import static org.hamcrest.Matchers.*;
 
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Message;
+import org.junit.Assert;
 import org.junit.rules.ExternalResource;
 
 public class FakeAuctionServer extends ExternalResource {
@@ -34,20 +36,22 @@ public class FakeAuctionServer extends ExternalResource {
     }
 
     public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-        messageListener.receivesAMessage();
+        messageListener.receivesAMessage(is(anything()));
     }
 
     public void announceClosed() throws XMPPException {
         currentChat.sendMessage(new Message());
     }
 
-    public void reportPrice(int price, int increment, String id) {
-        // TODO Auto-generated method stub
-
+    public void reportPrice(int price, int increment, String bidder) throws XMPPException {
+        currentChat.sendMessage(String.format("SOLVersion: 1.1; Event: PRICE; "
+                + "CurrentPrice: %d; Increment: %d; Bidder: %s;", price, increment, bidder));
     }
 
-    public void hasReceivedBid(int price, String id) {
-        // TODO Auto-generated method stub
+    public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+        Assert.assertThat(currentChat.getParticipant(), equalTo(sniperId));
+        messageListener.receivesAMessage(equalTo(String.format(
+                "SOLVersion: 1.1; Command: BID; Price: %d;", bid)));
 
     }
 
