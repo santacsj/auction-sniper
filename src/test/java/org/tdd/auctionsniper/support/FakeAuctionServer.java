@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.*;
 
 import org.hamcrest.Matcher;
 import org.jivesoftware.smack.*;
-import org.jivesoftware.smack.packet.Message;
 import org.junit.Assert;
 import org.junit.rules.ExternalResource;
 import org.tdd.auctionsniper.Main;
@@ -42,7 +41,7 @@ public class FakeAuctionServer extends ExternalResource {
     }
 
     public void announceClosed() throws XMPPException {
-        currentChat.sendMessage(new Message());
+        currentChat.sendMessage("SOLVersion: 1.1; Event: CLOSE;");
     }
 
     public void reportPrice(int price, int increment, String bidder) throws XMPPException {
