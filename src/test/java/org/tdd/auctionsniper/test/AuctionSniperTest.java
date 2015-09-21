@@ -4,8 +4,7 @@ import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
-import org.tdd.auctionsniper.AuctionSniper;
-import org.tdd.auctionsniper.SniperListener;
+import org.tdd.auctionsniper.*;
 
 public class AuctionSniperTest {
 
@@ -13,7 +12,8 @@ public class AuctionSniperTest {
     public final JUnitRuleMockery context = new JUnitRuleMockery();
 
     private final SniperListener sniperListener = context.mock(SniperListener.class);
-    private final AuctionSniper sniper = new AuctionSniper(sniperListener);
+    private final Auction auction = context.mock(Auction.class);
+    private final AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
 
     @Test
     public void reportsLostWhenAuctionCloses() {
@@ -23,6 +23,20 @@ public class AuctionSniperTest {
             }
         });
         sniper.auctionClosed();
+    }
+
+    @Test
+    public void bidsHigherAndReportsBiddingWhenNewPriceArrives() {
+        int price = 1001;
+        int increment = 25;
+        context.checking(new Expectations() {
+            {
+                oneOf(auction).bid(price + increment);
+                atLeast(1).of(sniperListener).sniperBidding();
+            }
+        });
+
+        sniper.currentPrice(price, increment);
     }
 
 }
