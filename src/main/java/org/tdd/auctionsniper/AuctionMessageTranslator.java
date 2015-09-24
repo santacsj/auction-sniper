@@ -9,9 +9,11 @@ import org.jivesoftware.smack.packet.Message;
 
 public class AuctionMessageTranslator implements MessageListener {
 
+    private final String sniperId;
     private final AuctionEventListener listener;
 
-    public AuctionMessageTranslator(AuctionEventListener listener) {
+    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
+        this.sniperId = sniperId;
         this.listener = listener;
     }
 
@@ -24,7 +26,7 @@ public class AuctionMessageTranslator implements MessageListener {
             listener.auctionClosed();
             break;
         case "PRICE":
-            listener.currentPrice(event.currentPrice(), event.increment());
+            listener.currentPrice(event.currentPrice(), event.increment(), null);
         }
     }
 

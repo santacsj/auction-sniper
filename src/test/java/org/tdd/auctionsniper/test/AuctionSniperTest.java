@@ -36,7 +36,7 @@ public class AuctionSniperTest {
             }
         });
 
-        sniper.currentPrice(price, increment);
+        sniper.currentPrice(price, increment, null);
     }
 
 }
