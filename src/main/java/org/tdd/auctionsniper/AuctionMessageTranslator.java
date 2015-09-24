@@ -6,6 +6,7 @@ import java.util.Map;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.packet.Message;
+import org.tdd.auctionsniper.AuctionEventListener.PriceSource;
 
 public class AuctionMessageTranslator implements MessageListener {
 
@@ -26,7 +27,7 @@ public class AuctionMessageTranslator implements MessageListener {
             listener.auctionClosed();
             break;
         case "PRICE":
-            listener.currentPrice(event.currentPrice(), event.increment(), null);
+            listener.currentPrice(event.currentPrice(), event.increment(), event.isFrom(sniperId));
         }
     }
 
@@ -43,6 +44,15 @@ public class AuctionMessageTranslator implements MessageListener {
 
         public int increment() {
             return getInt("Increment");
+        }
+
+        public PriceSource isFrom(String sniperId) {
+            return sniperId.equals(getBidder()) ? PriceSource.FromSniper
+                    : PriceSource.FromOtherBidder;
+        }
+
+        private String getBidder() {
+            return get("Bidder");
         }
 
         private int getInt(String fieldName) {
