@@ -8,7 +8,30 @@ import javax.swing.SwingUtilities;
 import org.jivesoftware.smack.*;
 import org.tdd.auctionsniper.ui.MainWindow;
 
-public class Main implements AuctionEventListener {
+public class Main {
+
+    public class SniperStateDisplayer implements SniperListener {
+
+        @Override
+        public void sniperBidding() {
+            showStatus(MainWindow.STATUS_BIDDING);
+        }
+
+        @Override
+        public void sniperLost() {
+            showStatus(MainWindow.STATUS_LOST);
+        }
+
+        @Override
+        public void sniperWinning() {
+            showStatus(MainWindow.STATUS_WINNING);
+        }
+
+        private void showStatus(String status) {
+            SwingUtilities.invokeLater(() -> ui.showStatus(status));
+        }
+
+    }
 
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
@@ -52,10 +75,14 @@ public class Main implements AuctionEventListener {
 
     private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
         disconnectWhenUICloses(connection);
-        Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection),
-                new AuctionMessageTranslator(this));
+
+        Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
         notToBeGCd = chat;
-        chat.sendMessage(JOIN_COMMAND_FORMAT);
+
+        Auction auction = new XMPPAuction(chat);
+        chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction,
+                new SniperStateDisplayer())));
+        auction.join();
     }
 
     private void disconnectWhenUICloses(XMPPConnection connection) {
@@ -69,17 +96,6 @@ public class Main implements AuctionEventListener {
 
     private void startUserInterface() throws Exception {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
-    }
-
-    @Override
-    public void auctionClosed() {
-        SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
-    }
-
-    @Override
-    public void currentPrice(int price, int increment) {
-        // TODO Auto-generated method stub
-
     }
 
 }
