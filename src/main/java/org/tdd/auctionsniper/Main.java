@@ -10,34 +10,6 @@ import org.tdd.auctionsniper.ui.MainWindow;
 
 public class Main implements SniperListener {
 
-    public static class XMPPAuction implements Auction {
-
-        private final Chat chat;
-
-        public XMPPAuction(Chat chat) {
-            this.chat = chat;
-        }
-
-        @Override
-        public void join() {
-            sendMessage(JOIN_COMMAND_FORMAT);
-        }
-
-        @Override
-        public void bid(int amount) {
-            sendMessage(String.format(BID_COMMAND_FORMAT, amount));
-        }
-
-        private void sendMessage(String message) {
-            try {
-                chat.sendMessage(message);
-            } catch (XMPPException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
     private static final int ARG_PASSWORD = 2;
