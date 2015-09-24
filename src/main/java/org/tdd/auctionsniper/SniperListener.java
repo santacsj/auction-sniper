@@ -10,4 +10,6 @@ public interface SniperListener extends EventListener {
 
     public void sniperWinning();
 
+    public void sniperWon();
+
 }

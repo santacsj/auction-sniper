@@ -27,6 +27,11 @@ public class Main {
             showStatus(MainWindow.STATUS_WINNING);
         }
 
+        @Override
+        public void sniperWon() {
+            showStatus(MainWindow.STATUS_WON);
+        }
+
         private void showStatus(String status) {
             SwingUtilities.invokeLater(() -> ui.showStatus(status));
         }
@@ -80,8 +85,8 @@ public class Main {
         notToBeGCd = chat;
 
         Auction auction = new XMPPAuction(chat);
-        chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction,
-                new SniperStateDisplayer())));
+        chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(),
+                new AuctionSniper(auction, new SniperStateDisplayer())));
         auction.join();
     }
 
