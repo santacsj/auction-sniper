@@ -1,6 +1,7 @@
 package org.tdd.auctionsniper.test;
 
 import org.jmock.Expectations;
+import org.jmock.States;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,15 +15,34 @@ public class AuctionSniperTest {
 
     private final SniperListener sniperListener = context.mock(SniperListener.class);
     private final Auction auction = context.mock(Auction.class);
+    private final States sniperState = context.states("sniper");
     private final AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
 
     @Test
-    public void reportsLostWhenAuctionCloses() {
+    public void reportsLostWhenAuctionClosesImmediately() {
         context.checking(new Expectations() {
             {
                 atLeast(1).of(sniperListener).sniperLost();
             }
         });
+        sniper.auctionClosed();
+    }
+
+    @Test
+    public void reportsLostIfAuctionClosesWhenBidding() {
+        context.checking(new Expectations() {
+            {
+                ignoring(auction);
+
+                allowing(sniperListener).sniperBidding();
+                then(sniperState.is("bidding"));
+
+                atLeast(1).of(sniperListener).sniperLost();
+                when(sniperState.is("bidding"));
+            }
+        });
+
+        sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
         sniper.auctionClosed();
     }
 
