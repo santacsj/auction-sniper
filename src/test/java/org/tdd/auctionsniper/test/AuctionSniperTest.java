@@ -5,6 +5,7 @@ import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
 import org.tdd.auctionsniper.*;
+import org.tdd.auctionsniper.AuctionEventListener.PriceSource;
 
 public class AuctionSniperTest {
 
@@ -36,7 +37,18 @@ public class AuctionSniperTest {
             }
         });
 
-        sniper.currentPrice(price, increment, null);
+        sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
+    }
+
+    @Test
+    public void reportsIsWinningWhenCurrentPriceComesFromSniper() {
+        context.checking(new Expectations() {
+            {
+                atLeast(1).of(sniperListener).sniperWinning();
+            }
+        });
+
+        sniper.currentPrice(123, 45, PriceSource.FromSniper);
     }
 
 }
