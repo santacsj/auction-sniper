@@ -2,6 +2,8 @@ package org.tdd.auctionsniper.ui;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.tdd.auctionsniper.SniperState;
+
 @SuppressWarnings("serial")
 public class SnipersTableModel extends AbstractTableModel {
     private String statusText = MainWindow.STATUS_JOINING;
@@ -24,6 +26,10 @@ public class SnipersTableModel extends AbstractTableModel {
     public void setStatusText(String statusText) {
         this.statusText = statusText;
         fireTableRowsUpdated(0, 0);
+    }
+
+    public void sniperStatusChanged(SniperState sniperState, String statusText) {
+
     }
 
 }
