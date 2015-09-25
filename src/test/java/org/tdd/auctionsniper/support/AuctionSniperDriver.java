@@ -2,12 +2,12 @@ package org.tdd.auctionsniper.support;
 
 import org.hamcrest.Matchers;
 import org.tdd.auctionsniper.Main;
-import org.tdd.auctionsniper.ui.MainWindow;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
-import com.objogate.wl.swing.driver.JLabelDriver;
+import com.objogate.wl.swing.driver.JTableDriver;
 import com.objogate.wl.swing.gesture.GesturePerformer;
+import com.objogate.wl.swing.matcher.JLabelTextMatcher;
 
 @SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
@@ -18,9 +18,8 @@ public class AuctionSniperDriver extends JFrameDriver {
     }
 
     public void showsSniperStatus(String statusText) {
-        new JLabelDriver(this, named(MainWindow.SNIPER_STATUS_NAME)).hasText(Matchers
-                .equalTo(statusText));
-
+        new JTableDriver(this)
+                .hasCell(JLabelTextMatcher.withLabelText(Matchers.equalTo(statusText)));
     }
 
     public void dispose() {
