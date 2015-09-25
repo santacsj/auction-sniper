@@ -14,8 +14,11 @@ public class ApplicationRunner extends ExternalResource {
             + "/" + FakeAuctionServer.AUCTION_RESOURCE;
 
     private AuctionSniperDriver driver;
+    private String itemId;
 
     public void startBiddingIn(FakeAuctionServer auction) {
+        itemId = auction.getItemId();
+
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
@@ -59,18 +62,17 @@ public class ApplicationRunner extends ExternalResource {
     }
 
     public void hasShownSniperIsBidding(int lastPrice, int lastBid) {
-        // TODO Auto-generated method stub
+        driver.showsSniperStatus(itemId, lastPrice, lastBid, MainWindow.STATUS_BIDDING);
 
     }
 
     public void hasShownSniperIsWinning(int lastBid) {
-        // TODO Auto-generated method stub
+        driver.showsSniperStatus(itemId, lastBid, lastBid, MainWindow.STATUS_WINNING);
 
     }
 
     public void showsSniperHasWonAuction(int lastPrice) {
-        // TODO Auto-generated method stub
-
+        driver.showsSniperStatus(itemId, lastPrice, lastPrice, MainWindow.STATUS_WON);
     }
 
 }
