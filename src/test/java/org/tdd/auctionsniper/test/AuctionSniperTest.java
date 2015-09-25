@@ -10,13 +10,15 @@ import org.tdd.auctionsniper.AuctionEventListener.PriceSource;
 
 public class AuctionSniperTest {
 
+    private final static String ITEM_ID = "";
+
     @Rule
     public final JUnitRuleMockery context = new JUnitRuleMockery();
 
     private final SniperListener sniperListener = context.mock(SniperListener.class);
     private final Auction auction = context.mock(Auction.class);
     private final States sniperState = context.states("sniper");
-    private final AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
+    private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction, sniperListener);
 
     @Test
     public void reportsLostWhenAuctionClosesImmediately() {
@@ -34,7 +36,7 @@ public class AuctionSniperTest {
             {
                 ignoring(auction);
 
-                allowing(sniperListener).sniperBidding();
+                allowing(sniperListener).sniperBidding(with(any(SniperState.class)));
                 then(sniperState.is("bidding"));
 
                 atLeast(1).of(sniperListener).sniperLost();
@@ -50,10 +52,12 @@ public class AuctionSniperTest {
     public void bidsHigherAndReportsBiddingWhenNewPriceArrives() {
         int price = 1001;
         int increment = 25;
+        int bid = price + increment;
+
         context.checking(new Expectations() {
             {
                 oneOf(auction).bid(price + increment);
-                atLeast(1).of(sniperListener).sniperBidding();
+                atLeast(1).of(sniperListener).sniperBidding(new SniperState(ITEM_ID, price, bid));
             }
         });
 
