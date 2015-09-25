@@ -58,4 +58,19 @@ public class ApplicationRunner extends ExternalResource {
         stop();
     }
 
+    public void hasShownSniperIsBidding(int lastPrice, int lastBid) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void hasShownSniperIsWinning(int lastBid) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void showsSniperHasWonAuction(int lastPrice) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

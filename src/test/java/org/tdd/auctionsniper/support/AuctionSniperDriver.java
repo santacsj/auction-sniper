@@ -22,8 +22,4 @@ public class AuctionSniperDriver extends JFrameDriver {
                 .hasCell(JLabelTextMatcher.withLabelText(Matchers.equalTo(statusText)));
     }
 
-    public void dispose() {
-        component().component().dispose();
-    }
-
 }
