@@ -28,7 +28,7 @@ public class SniperSnapshot {
     }
 
     public SniperSnapshot closed() {
-        return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.whenAuctionCLosed());
+        return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionCLosed());
     }
 
     @Override
@@ -63,6 +63,15 @@ public class SniperSnapshot {
         if (state != other.state)
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("SniperSnapshot [itemId=").append(itemId).append(", lastPrice=")
+                .append(lastPrice).append(", lastBid=").append(lastBid).append(", state=")
+                .append(state).append("]");
+        return builder.toString();
     }
 
 }

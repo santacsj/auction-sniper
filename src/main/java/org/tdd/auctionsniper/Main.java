@@ -18,20 +18,6 @@ public class Main {
                     MainWindow.STATUS_BIDDING));
         }
 
-        @Override
-        public void sniperLost() {
-            showStatus(MainWindow.STATUS_LOST);
-        }
-
-        @Override
-        public void sniperWon() {
-            showStatus(MainWindow.STATUS_WON);
-        }
-
-        private void showStatus(String status) {
-            SwingUtilities.invokeLater(() -> ui.showStatus(status));
-        }
-
     }
 
     private static final int ARG_HOSTNAME = 0;

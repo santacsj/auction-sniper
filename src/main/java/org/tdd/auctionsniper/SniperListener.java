@@ -6,8 +6,4 @@ public interface SniperListener extends EventListener {
 
     public void sniperStateChanged(SniperSnapshot newSnapshot);
 
-    public void sniperLost();
-
-    public void sniperWon();
-
 }

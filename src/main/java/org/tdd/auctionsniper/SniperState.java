@@ -1,10 +1,33 @@
 package org.tdd.auctionsniper;
 
 public enum SniperState {
-    JOINING, BIDDING, WINNING, LOST, WON;
+    JOINING {
 
-    public static SniperState whenAuctionCLosed() {
-        // TODO Auto-generated method stub
-        return null;
+        @Override
+        public SniperState whenAuctionCLosed() {
+            return LOST;
+        }
+
+    },
+    BIDDING {
+
+        @Override
+        public SniperState whenAuctionCLosed() {
+            return LOST;
+        }
+
+    },
+    WINNING {
+
+        @Override
+        public SniperState whenAuctionCLosed() {
+            return WON;
+        }
+
+    },
+    LOST, WON;
+
+    public SniperState whenAuctionCLosed() {
+        throw new Defect("Auction is already closed");
     }
 }
