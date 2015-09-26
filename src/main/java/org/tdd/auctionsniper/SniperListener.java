@@ -4,7 +4,7 @@ import java.util.EventListener;
 
 public interface SniperListener extends EventListener {
 
-    public void sniperStateChanged(SniperSnapshot sniperState);
+    public void sniperStateChanged(SniperSnapshot newSnapshot);
 
     public void sniperLost();
 
