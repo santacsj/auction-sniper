@@ -5,6 +5,7 @@ import static org.tdd.auctionsniper.support.FakeAuctionServer.*;
 import org.junit.rules.ExternalResource;
 import org.tdd.auctionsniper.Main;
 import org.tdd.auctionsniper.SniperState;
+import org.tdd.auctionsniper.ui.MainWindow;
 import org.tdd.auctionsniper.ui.SnipersTableModel;
 
 public class ApplicationRunner extends ExternalResource {
@@ -33,7 +34,11 @@ public class ApplicationRunner extends ExternalResource {
         thread.setDaemon(true);
         thread.start();
         driver = new AuctionSniperDriver(1000);
-        driver.showsSniperStatus(SnipersTableModel.textFor(SniperState.JOINING));
+        driver.hasTitle(MainWindow.APPLICATION_TITLE);
+        driver.hasColumnTitles();
+        driver.showsSniperStatus(SnipersTableModel.JOINING.itemId,
+                SnipersTableModel.JOINING.lastPrice, SnipersTableModel.JOINING.lastBid,
+                SnipersTableModel.textFor(SnipersTableModel.JOINING.state));
     }
 
     public void showsSniperHasLostAuction() {

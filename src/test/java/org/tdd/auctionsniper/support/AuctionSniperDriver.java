@@ -1,11 +1,12 @@
 package org.tdd.auctionsniper.support;
 
+import javax.swing.table.JTableHeader;
+
 import org.hamcrest.Matchers;
 import org.tdd.auctionsniper.Main;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
-import com.objogate.wl.swing.driver.JFrameDriver;
-import com.objogate.wl.swing.driver.JTableDriver;
+import com.objogate.wl.swing.driver.*;
 import com.objogate.wl.swing.gesture.GesturePerformer;
 import com.objogate.wl.swing.matcher.IterableComponentsMatcher;
 import com.objogate.wl.swing.matcher.JLabelTextMatcher;
@@ -29,5 +30,15 @@ public class AuctionSniperDriver extends JFrameDriver {
                 JLabelTextMatcher.withLabelText(Integer.toString(lastPrice)),
                 JLabelTextMatcher.withLabelText(Integer.toString(lastBid)),
                 JLabelTextMatcher.withLabelText(statusText)));
+    }
+
+    public void hasColumnTitles() {
+        JTableHeaderDriver headers = new JTableHeaderDriver(this, JTableHeader.class);
+        headers.hasHeaders(IterableComponentsMatcher.matching(
+                JLabelTextMatcher.withLabelText("Item"),
+                JLabelTextMatcher.withLabelText("Last Price"),
+                JLabelTextMatcher.withLabelText("Last Bid"),
+                JLabelTextMatcher.withLabelText("State")));
+
     }
 }

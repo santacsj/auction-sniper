@@ -7,14 +7,14 @@ import org.tdd.auctionsniper.*;
 @SuppressWarnings("serial")
 public class SnipersTableModel extends AbstractTableModel implements SniperListener {
     private static final String[] STATUS_TEXT = { "Joining", "Bidding", "Winning", "Lost", "Won" };
-    private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0,
+    public static final SniperSnapshot JOINING = new SniperSnapshot("", 0, 0,
             SniperState.JOINING);
 
     public static String textFor(SniperState state) {
         return STATUS_TEXT[state.ordinal()];
     }
 
-    private SniperSnapshot snapshot = STARTING_UP;
+    private SniperSnapshot snapshot = JOINING;
 
     @Override
     public int getRowCount() {

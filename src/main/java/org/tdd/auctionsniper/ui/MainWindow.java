@@ -10,6 +10,7 @@ import org.tdd.auctionsniper.Main;
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
     public static final String SNIPERS_TABLE_NAME = "snipers table";
+    public static final String APPLICATION_TITLE = "";
 
     public MainWindow(SnipersTableModel snipers) {
         super("Auction Sniper");
