@@ -10,11 +10,12 @@ import org.tdd.auctionsniper.Main;
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
     public static final String SNIPERS_TABLE_NAME = "snipers table";
-    public static final String APPLICATION_TITLE = "";
+    public static final String APPLICATION_TITLE = "Auction Sniper";
 
     public MainWindow(SnipersTableModel snipers) {
         super("Auction Sniper");
         setName(Main.MAIN_WINDOW_NAME);
+        setTitle(APPLICATION_TITLE);
         fillContentPane(makeSnipersTable(snipers));
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

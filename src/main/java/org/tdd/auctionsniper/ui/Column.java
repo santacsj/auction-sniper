@@ -3,7 +3,7 @@ package org.tdd.auctionsniper.ui;
 import org.tdd.auctionsniper.SniperSnapshot;
 
 public enum Column {
-    ITEM_IDENTIFIER {
+    ITEM_IDENTIFIER("Item") {
 
         @Override
         public Object valueIn(SniperSnapshot snapshot) {
@@ -11,7 +11,7 @@ public enum Column {
         }
 
     },
-    LAST_PRICE {
+    LAST_PRICE("Last Price") {
 
         @Override
         public Object valueIn(SniperSnapshot snapshot) {
@@ -19,7 +19,7 @@ public enum Column {
         }
 
     },
-    LAST_BID {
+    LAST_BID("Last Bid") {
 
         @Override
         public Object valueIn(SniperSnapshot snapshot) {
@@ -27,7 +27,7 @@ public enum Column {
         }
 
     },
-    SNIPER_STATE {
+    SNIPER_STATE("State") {
 
         @Override
         public Object valueIn(SniperSnapshot snapshot) {
@@ -38,6 +38,12 @@ public enum Column {
 
     public static Column at(int offset) {
         return values()[offset];
+    }
+
+    public final String name;
+
+    private Column(String name) {
+        this.name = name;
     }
 
     public abstract Object valueIn(SniperSnapshot snapshot);
