@@ -1,5 +1,6 @@
 package org.tdd.auctionsniper.test;
 
+import org.hamcrest.*;
 import org.jmock.Expectations;
 import org.jmock.States;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -36,7 +37,8 @@ public class AuctionSniperTest {
             {
                 ignoring(auction);
 
-                allowing(sniperListener).sniperStateChanged(with(any(SniperSnapshot.class)));
+                allowing(sniperListener).sniperStateChanged(
+                        with(aSniperThatIs(SniperState.BIDDING)));
                 then(sniperState.is("bidding"));
 
                 atLeast(1).of(sniperListener).sniperLost();
@@ -57,7 +59,8 @@ public class AuctionSniperTest {
         context.checking(new Expectations() {
             {
                 oneOf(auction).bid(price + increment);
-                atLeast(1).of(sniperListener).sniperStateChanged(new SniperSnapshot(ITEM_ID, price, bid, null));
+                atLeast(1).of(sniperListener).sniperStateChanged(
+                        new SniperSnapshot(ITEM_ID, price, bid, SniperState.BIDDING));
             }
         });
 
@@ -92,6 +95,17 @@ public class AuctionSniperTest {
 
         sniper.currentPrice(123, 45, PriceSource.FromSniper);
         sniper.auctionClosed();
+    }
+
+    private Matcher<SniperSnapshot> aSniperThatIs(SniperState state) {
+        return new FeatureMatcher<SniperSnapshot, SniperState>(Matchers.equalTo(state),
+                "sniper that is", "was") {
+
+            @Override
+            protected SniperState featureValueOf(SniperSnapshot actual) {
+                return actual.state;
+            }
+        };
     }
 
 }

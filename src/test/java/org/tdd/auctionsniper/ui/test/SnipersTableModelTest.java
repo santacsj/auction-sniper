@@ -10,6 +10,7 @@ import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.*;
 import org.tdd.auctionsniper.SniperSnapshot;
+import org.tdd.auctionsniper.SniperState;
 import org.tdd.auctionsniper.ui.*;
 
 public class SnipersTableModelTest {
@@ -38,7 +39,7 @@ public class SnipersTableModelTest {
             }
         });
 
-        model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666, null), MainWindow.STATUS_BIDDING);
+        model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666, SniperState.BIDDING));
 
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");
         assertColumnEquals(Column.LAST_PRICE, 555);

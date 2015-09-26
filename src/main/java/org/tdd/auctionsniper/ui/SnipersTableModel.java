@@ -3,11 +3,15 @@ package org.tdd.auctionsniper.ui;
 import javax.swing.table.AbstractTableModel;
 
 import org.tdd.auctionsniper.SniperSnapshot;
+import org.tdd.auctionsniper.SniperState;
 
 @SuppressWarnings("serial")
 public class SnipersTableModel extends AbstractTableModel {
-    private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, null);
-    private String statusText = MainWindow.STATUS_JOINING;
+    private static final String[] STATUS_TEXT = { MainWindow.STATUS_JOINING,
+            MainWindow.STATUS_BIDDING };
+    private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0,
+            SniperState.JOINING);
+    private String state = MainWindow.STATUS_JOINING;
     private SniperSnapshot sniperState = STARTING_UP;
 
     @Override
@@ -30,20 +34,20 @@ public class SnipersTableModel extends AbstractTableModel {
         case LAST_BID:
             return sniperState.lastBid;
         case SNIPER_STATE:
-            return statusText;
+            return state;
         default:
             throw new IllegalArgumentException("No column at " + columnIndex);
         }
     }
 
     public void setStatusText(String statusText) {
-        this.statusText = statusText;
+        this.state = statusText;
         fireTableRowsUpdated(0, 0);
     }
 
-    public void sniperStatusChanged(SniperSnapshot sniperState, String statusText) {
-        this.sniperState = sniperState;
-        this.statusText = statusText;
+    public void sniperStatusChanged(SniperSnapshot newSnapshot) {
+        this.sniperState = newSnapshot;
+        this.state = STATUS_TEXT[newSnapshot.state.ordinal()];
         fireTableRowsUpdated(0, 0);
     }
 
