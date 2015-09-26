@@ -28,7 +28,7 @@ public class SniperSnapshot {
     }
 
     public SniperSnapshot closed() {
-        return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionCLosed());
+        return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionClosed());
     }
 
     @Override

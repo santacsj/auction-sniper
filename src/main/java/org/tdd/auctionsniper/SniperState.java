@@ -4,7 +4,7 @@ public enum SniperState {
     JOINING {
 
         @Override
-        public SniperState whenAuctionCLosed() {
+        public SniperState whenAuctionClosed() {
             return LOST;
         }
 
@@ -12,7 +12,7 @@ public enum SniperState {
     BIDDING {
 
         @Override
-        public SniperState whenAuctionCLosed() {
+        public SniperState whenAuctionClosed() {
             return LOST;
         }
 
@@ -20,14 +20,14 @@ public enum SniperState {
     WINNING {
 
         @Override
-        public SniperState whenAuctionCLosed() {
+        public SniperState whenAuctionClosed() {
             return WON;
         }
 
     },
     LOST, WON;
 
-    public SniperState whenAuctionCLosed() {
+    public SniperState whenAuctionClosed() {
         throw new Defect("Auction is already closed");
     }
 }

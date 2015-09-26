@@ -10,6 +10,11 @@ public class SnipersTableModel extends AbstractTableModel {
     private static final String[] STATUS_TEXT = { "Joining", "Bidding", "Winning", "Lost", "Won" };
     private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0,
             SniperState.JOINING);
+
+    public static String textFor(SniperState state) {
+        return STATUS_TEXT[state.ordinal()];
+    }
+
     private SniperSnapshot snapshot = STARTING_UP;
 
     @Override
@@ -24,22 +29,7 @@ public class SnipersTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        switch (Column.at(columnIndex)) {
-        case ITEM_IDENTIFIER:
-            return snapshot.itemId;
-        case LAST_PRICE:
-            return snapshot.lastPrice;
-        case LAST_BID:
-            return snapshot.lastBid;
-        case SNIPER_STATE:
-            return textFor(snapshot.state);
-        default:
-            throw new IllegalArgumentException("No column at " + columnIndex);
-        }
-    }
-
-    public static String textFor(SniperState state) {
-        return STATUS_TEXT[state.ordinal()];
+        return Column.at(columnIndex).valueIn(snapshot);
     }
 
     public void sniperStatusChanged(SniperSnapshot newSnapshot) {
