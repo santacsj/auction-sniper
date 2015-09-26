@@ -36,7 +36,7 @@ public class AuctionSniperTest {
             {
                 ignoring(auction);
 
-                allowing(sniperListener).sniperBidding(with(any(SniperState.class)));
+                allowing(sniperListener).sniperStateChanged(with(any(SniperSnapshot.class)));
                 then(sniperState.is("bidding"));
 
                 atLeast(1).of(sniperListener).sniperLost();
@@ -57,7 +57,7 @@ public class AuctionSniperTest {
         context.checking(new Expectations() {
             {
                 oneOf(auction).bid(price + increment);
-                atLeast(1).of(sniperListener).sniperBidding(new SniperState(ITEM_ID, price, bid));
+                atLeast(1).of(sniperListener).sniperStateChanged(new SniperSnapshot(ITEM_ID, price, bid, null));
             }
         });
 

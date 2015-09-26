@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 
 import org.tdd.auctionsniper.Main;
-import org.tdd.auctionsniper.SniperState;
+import org.tdd.auctionsniper.SniperSnapshot;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
@@ -44,7 +44,7 @@ public class MainWindow extends JFrame {
         snipers.setStatusText(statusText);
     }
 
-    public void sniperStatusChanged(SniperState sniperState, String statusText) {
+    public void sniperStatusChanged(SniperSnapshot sniperState, String statusText) {
         snipers.sniperStatusChanged(sniperState, statusText);
     }
 
