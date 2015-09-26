@@ -1,41 +1,37 @@
 package org.tdd.auctionsniper.ui;
 
-import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.Container;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.border.LineBorder;
+import javax.swing.*;
 
 import org.tdd.auctionsniper.Main;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-    public static final String SNIPER_STATUS_NAME = "sniper status";
-    private final JLabel sniperStatus = createLabel(MainWindow.STATUS_JOINING);
-    public static final String STATUS_BIDDING = "Bidding";
-    public static final String STATUS_JOINING = "Joining";
-    public static final String STATUS_LOST = "Lost";
-    public static final String STATUS_WINNING = "Winning";
-    public static final String STATUS_WON = "Won";
+    public static final String SNIPERS_TABLE_NAME = "snipers table";
+    public static final String APPLICATION_TITLE = "Auction Sniper";
 
-    public MainWindow() {
+    public MainWindow(SnipersTableModel snipers) {
         super("Auction Sniper");
         setName(Main.MAIN_WINDOW_NAME);
-        add(sniperStatus);
+        setTitle(APPLICATION_TITLE);
+        fillContentPane(makeSnipersTable(snipers));
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
-    private JLabel createLabel(String status) {
-        JLabel result = new JLabel(status);
-        result.setName(SNIPER_STATUS_NAME);
-        result.setBorder(new LineBorder(Color.BLACK));
-        return result;
+    private void fillContentPane(JTable snipersTable) {
+        Container contentPane = getContentPane();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(new JScrollPane(snipersTable), BorderLayout.CENTER);
     }
 
-    public void showStatus(String status) {
-        sniperStatus.setText(status);
+    private JTable makeSnipersTable(SnipersTableModel snipers) {
+        JTable sniperTable = new JTable(snipers);
+        sniperTable.setName(SNIPERS_TABLE_NAME);
+        return sniperTable;
     }
 
 }

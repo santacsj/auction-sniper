@@ -7,33 +7,21 @@ import javax.swing.SwingUtilities;
 
 import org.jivesoftware.smack.*;
 import org.tdd.auctionsniper.ui.MainWindow;
+import org.tdd.auctionsniper.ui.SnipersTableModel;
 
 public class Main {
 
-    public class SniperStateDisplayer implements SniperListener {
+    public class SwingThreadSniperListener implements SniperListener {
 
-        @Override
-        public void sniperBidding() {
-            showStatus(MainWindow.STATUS_BIDDING);
+        private final SniperListener listener;
+
+        public SwingThreadSniperListener(SniperListener listener) {
+            this.listener = listener;
         }
 
         @Override
-        public void sniperLost() {
-            showStatus(MainWindow.STATUS_LOST);
-        }
-
-        @Override
-        public void sniperWinning() {
-            showStatus(MainWindow.STATUS_WINNING);
-        }
-
-        @Override
-        public void sniperWon() {
-            showStatus(MainWindow.STATUS_WON);
-        }
-
-        private void showStatus(String status) {
-            SwingUtilities.invokeLater(() -> ui.showStatus(status));
+        public void sniperStateChanged(SniperSnapshot newSnapshot) {
+            SwingUtilities.invokeLater(() -> listener.sniperStateChanged(newSnapshot));
         }
 
     }
@@ -70,12 +58,13 @@ public class Main {
         return connection;
     }
 
+    private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
     @SuppressWarnings("unused")
     private Chat notToBeGCd;
 
     public Main() throws Exception {
-        startUserInterface();
+        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
     private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
@@ -86,7 +75,7 @@ public class Main {
 
         Auction auction = new XMPPAuction(chat);
         chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(),
-                new AuctionSniper(auction, new SniperStateDisplayer())));
+                new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers))));
         auction.join();
     }
 
@@ -97,10 +86,6 @@ public class Main {
                 connection.disconnect();
             }
         });
-    }
-
-    private void startUserInterface() throws Exception {
-        SwingUtilities.invokeAndWait(() -> ui = new MainWindow());
     }
 
 }
