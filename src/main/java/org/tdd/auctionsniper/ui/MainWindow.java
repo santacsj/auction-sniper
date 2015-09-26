@@ -12,11 +12,6 @@ import org.tdd.auctionsniper.SniperSnapshot;
 public class MainWindow extends JFrame {
     public static final String SNIPERS_TABLE_NAME = "snipers table";
     private final SnipersTableModel snipers = new SnipersTableModel();
-    public static final String STATUS_BIDDING = "Bidding";
-    public static final String STATUS_JOINING = "Joining";
-    public static final String STATUS_LOST = "Lost";
-    public static final String STATUS_WINNING = "Winning";
-    public static final String STATUS_WON = "Won";
 
     public MainWindow() {
         super("Auction Sniper");
@@ -39,12 +34,8 @@ public class MainWindow extends JFrame {
         return sniperTable;
     }
 
-    public void showStatus(String statusText) {
-        snipers.setStatusText(statusText);
-    }
-
-    public void sniperStatusChanged(SniperSnapshot sniperState, String statusText) {
-        snipers.sniperStatusChanged(sniperState);
+    public void sniperStatusChanged(SniperSnapshot newSnapshot) {
+        snipers.sniperStatusChanged(newSnapshot);
     }
 
 }

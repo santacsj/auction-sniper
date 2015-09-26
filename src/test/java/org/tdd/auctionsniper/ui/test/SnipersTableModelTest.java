@@ -11,7 +11,8 @@ import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.*;
 import org.tdd.auctionsniper.SniperSnapshot;
 import org.tdd.auctionsniper.SniperState;
-import org.tdd.auctionsniper.ui.*;
+import org.tdd.auctionsniper.ui.Column;
+import org.tdd.auctionsniper.ui.SnipersTableModel;
 
 public class SnipersTableModelTest {
 
@@ -44,7 +45,7 @@ public class SnipersTableModelTest {
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");
         assertColumnEquals(Column.LAST_PRICE, 555);
         assertColumnEquals(Column.LAST_BID, 666);
-        assertColumnEquals(Column.SNIPER_STATE, MainWindow.STATUS_BIDDING);
+        assertColumnEquals(Column.SNIPER_STATE, SnipersTableModel.textFor(SniperState.BIDDING));
     }
 
     private void assertColumnEquals(Column column, Object expected) {
