@@ -3,8 +3,7 @@ package org.tdd.auctionsniper.ui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 
-import javax.swing.JFrame;
-import javax.swing.JTable;
+import javax.swing.*;
 
 import org.tdd.auctionsniper.Main;
 import org.tdd.auctionsniper.SniperSnapshot;
@@ -31,7 +30,7 @@ public class MainWindow extends JFrame {
     private void fillContentPane(JTable snipersTable) {
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
-        contentPane.add(snipersTable, BorderLayout.CENTER);
+        contentPane.add(new JScrollPane(snipersTable), BorderLayout.CENTER);
     }
 
     private JTable makeSnipersTable() {

@@ -84,7 +84,7 @@ public class AuctionSniperTest {
         });
 
         sniper.currentPrice(123, 12, PriceSource.FromOtherBidder);
-        sniper.currentPrice(123, 45, PriceSource.FromSniper);
+        sniper.currentPrice(135, 45, PriceSource.FromSniper);
     }
 
     @Test
@@ -94,7 +94,8 @@ public class AuctionSniperTest {
 
                 ignoring(auction);
 
-                allowing(sniperListener).sniperWinning();
+                allowing(sniperListener).sniperStateChanged(
+                        with(aSniperThatIs(SniperState.WINNING)));
                 then(sniperState.is("winning"));
 
                 atLeast(1).of(sniperListener).sniperWon();

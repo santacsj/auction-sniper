@@ -8,7 +8,7 @@ import org.tdd.auctionsniper.SniperState;
 @SuppressWarnings("serial")
 public class SnipersTableModel extends AbstractTableModel {
     private static final String[] STATUS_TEXT = { MainWindow.STATUS_JOINING,
-            MainWindow.STATUS_BIDDING };
+            MainWindow.STATUS_BIDDING, MainWindow.STATUS_WINNING };
     private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0,
             SniperState.JOINING);
     private String state = MainWindow.STATUS_JOINING;
