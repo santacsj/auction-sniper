@@ -27,6 +27,10 @@ public class SniperSnapshot {
         return new SniperSnapshot(itemId, newLastPrice, lastBid, SniperState.WINNING);
     }
 
+    public SniperSnapshot closed() {
+        return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.whenAuctionCLosed());
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
