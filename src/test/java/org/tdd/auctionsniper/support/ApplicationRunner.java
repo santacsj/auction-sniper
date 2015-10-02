@@ -16,16 +16,13 @@ public class ApplicationRunner extends ExternalResource {
             + "/" + FakeAuctionServer.AUCTION_RESOURCE;
 
     private AuctionSniperDriver driver;
-    private String itemId;
 
-    public void startBiddingIn(FakeAuctionServer... auction) {
-        itemId = auction[0].getItemId();
-
+    public void startBiddingIn(FakeAuctionServer... auctions) {
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
                 try {
-                    Main.main(XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction[0].getItemId());
+                    Main.main(arguments(auctions));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -39,6 +36,16 @@ public class ApplicationRunner extends ExternalResource {
         driver.showsSniperStatus(SnipersTableModel.JOINING.itemId,
                 SnipersTableModel.JOINING.lastPrice, SnipersTableModel.JOINING.lastBid,
                 SnipersTableModel.textFor(SnipersTableModel.JOINING.state));
+    }
+
+    protected static String[] arguments(FakeAuctionServer... auctions) {
+        String[] arguments = new String[auctions.length + 3];
+        arguments[0] = XMPP_HOSTNAME;
+        arguments[1] = SNIPER_ID;
+        arguments[2] = SNIPER_PASSWORD;
+        for (int i = 0; i < auctions.length; i++)
+            arguments[i + 3] = auctions[i].getItemId();
+        return arguments;
     }
 
     public void showsSniperHasLostAuction(FakeAuctionServer auction) {
