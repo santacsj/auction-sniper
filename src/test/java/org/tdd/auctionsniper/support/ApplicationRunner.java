@@ -18,14 +18,14 @@ public class ApplicationRunner extends ExternalResource {
     private AuctionSniperDriver driver;
     private String itemId;
 
-    public void startBiddingIn(FakeAuctionServer auction) {
-        itemId = auction.getItemId();
+    public void startBiddingIn(FakeAuctionServer... auction) {
+        itemId = auction[0].getItemId();
 
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
                 try {
-                    Main.main(XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.getItemId());
+                    Main.main(XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction[0].getItemId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -46,19 +46,19 @@ public class ApplicationRunner extends ExternalResource {
     }
 
     public void hasShownSniperIsBidding(FakeAuctionServer auction, int lastPrice, int lastBid) {
-        driver.showsSniperStatus(itemId, lastPrice, lastBid,
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid,
                 SnipersTableModel.textFor(SniperState.BIDDING));
 
     }
 
     public void hasShownSniperIsWinning(FakeAuctionServer auction, int lastBid) {
-        driver.showsSniperStatus(itemId, lastBid, lastBid,
+        driver.showsSniperStatus(auction.getItemId(), lastBid, lastBid,
                 SnipersTableModel.textFor(SniperState.WINNING));
 
     }
 
     public void showsSniperHasWonAuction(FakeAuctionServer auction, int lastPrice) {
-        driver.showsSniperStatus(itemId, lastPrice, lastPrice,
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastPrice,
                 SnipersTableModel.textFor(SniperState.WON));
     }
 
