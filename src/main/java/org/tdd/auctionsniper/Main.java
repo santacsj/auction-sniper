@@ -2,6 +2,8 @@ package org.tdd.auctionsniper;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
@@ -42,8 +44,12 @@ public class Main {
 
     public static void main(String... args) throws Exception {
         Main main = new Main();
-        main.joinAuction(connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]),
-                args[ARG_ITEM_ID]);
+        XMPPConnection connection = connection(args[ARG_HOSTNAME], args[ARG_USERNAME],
+                args[ARG_PASSWORD]);
+        main.disconnectWhenUICloses(connection);
+
+        for (int i = 3; i < args.length; ++i)
+            main.joinAuction(connection, args[i]);
     }
 
     private static String auctionId(String itemId, XMPPConnection connection) {
@@ -60,18 +66,16 @@ public class Main {
 
     private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
-    @SuppressWarnings("unused")
-    private Chat notToBeGCd;
+    private Set<Chat> notToBeGCd;
 
     public Main() throws Exception {
+        this.notToBeGCd = new HashSet<Chat>();
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
     private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
-        disconnectWhenUICloses(connection);
-
         Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
-        notToBeGCd = chat;
+        notToBeGCd.add(chat);
 
         Auction auction = new XMPPAuction(chat);
         chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(),
