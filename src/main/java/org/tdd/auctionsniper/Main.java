@@ -37,7 +37,7 @@ public class Main {
 
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
 
-    public static final String JOIN_COMMAND_FORMAT = "";
+    public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
     public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 
     public static void main(String... args) throws Exception {
