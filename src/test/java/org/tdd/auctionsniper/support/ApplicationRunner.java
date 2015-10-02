@@ -41,23 +41,23 @@ public class ApplicationRunner extends ExternalResource {
                 SnipersTableModel.textFor(SnipersTableModel.JOINING.state));
     }
 
-    public void showsSniperHasLostAuction() {
+    public void showsSniperHasLostAuction(FakeAuctionServer auction) {
         driver.showsSniperStatus(SnipersTableModel.textFor(SniperState.LOST));
     }
 
-    public void hasShownSniperIsBidding(int lastPrice, int lastBid) {
+    public void hasShownSniperIsBidding(FakeAuctionServer auction, int lastPrice, int lastBid) {
         driver.showsSniperStatus(itemId, lastPrice, lastBid,
                 SnipersTableModel.textFor(SniperState.BIDDING));
 
     }
 
-    public void hasShownSniperIsWinning(int lastBid) {
+    public void hasShownSniperIsWinning(FakeAuctionServer auction, int lastBid) {
         driver.showsSniperStatus(itemId, lastBid, lastBid,
                 SnipersTableModel.textFor(SniperState.WINNING));
 
     }
 
-    public void showsSniperHasWonAuction(int lastPrice) {
+    public void showsSniperHasWonAuction(FakeAuctionServer auction, int lastPrice) {
         driver.showsSniperStatus(itemId, lastPrice, lastPrice,
                 SnipersTableModel.textFor(SniperState.WON));
     }
