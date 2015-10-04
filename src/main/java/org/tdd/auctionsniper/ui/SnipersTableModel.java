@@ -16,7 +16,6 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
         return STATUS_TEXT[state.ordinal()];
     }
 
-    private SniperSnapshot snapshot = JOINING;
     private List<SniperSnapshot> snapshots = new LinkedList<SniperSnapshot>();
 
     @Override
@@ -41,7 +40,7 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 
     @Override
     public void sniperStateChanged(SniperSnapshot newSnapshot) {
-        this.snapshot = newSnapshot;
+        snapshots.set(0, newSnapshot);
         fireTableRowsUpdated(0, 0);
     }
 
