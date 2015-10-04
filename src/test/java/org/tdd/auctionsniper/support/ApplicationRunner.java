@@ -18,7 +18,7 @@ public class ApplicationRunner extends ExternalResource {
     private AuctionSniperDriver driver;
 
     public void startBiddingIn(FakeAuctionServer... auctions) {
-        startSniper(auctions);
+        startSniper();
         for (FakeAuctionServer auction : auctions) {
             String itemId = auction.getItemId();
             driver.startBiddingFor(itemId);
@@ -26,12 +26,15 @@ public class ApplicationRunner extends ExternalResource {
         }
     }
 
-    private void startSniper(FakeAuctionServer... auctions) {
+    private void startSniper() {
+        // Needed by WindowLicker on OSX
+        System.setProperty("com.objogate.wl.keyboard", "Mac-GB");
+
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
                 try {
-                    Main.main(arguments(auctions));
+                    Main.main(arguments());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -44,13 +47,11 @@ public class ApplicationRunner extends ExternalResource {
         driver.hasColumnTitles();
     }
 
-    protected static String[] arguments(FakeAuctionServer... auctions) {
-        String[] arguments = new String[auctions.length + 3];
+    protected static String[] arguments() {
+        String[] arguments = new String[3];
         arguments[0] = XMPP_HOSTNAME;
         arguments[1] = SNIPER_ID;
         arguments[2] = SNIPER_PASSWORD;
-        for (int i = 0; i < auctions.length; i++)
-            arguments[i + 3] = auctions[i].getItemId();
         return arguments;
     }
 
