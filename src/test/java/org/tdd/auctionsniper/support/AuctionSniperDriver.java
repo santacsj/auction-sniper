@@ -18,7 +18,10 @@ import com.objogate.wl.swing.matcher.JLabelTextMatcher;
 public class AuctionSniperDriver extends JFrameDriver {
 
     public static AuctionSniperDriver withTimeout(int timeoutMillis) {
-        // Needed by WindowLicker on OSX
+        /*
+         * workaround for OSX
+         * see http://stackoverflow.com/questions/23316432/windowlicker-is-not-working-on-os-x
+         */
         System.setProperty("com.objogate.wl.keyboard", "Mac-GB");
         return new AuctionSniperDriver(timeoutMillis);
     }

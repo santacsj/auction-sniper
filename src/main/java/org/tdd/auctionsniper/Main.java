@@ -46,9 +46,7 @@ public class Main {
         XMPPConnection connection = connection(args[ARG_HOSTNAME], args[ARG_USERNAME],
                 args[ARG_PASSWORD]);
         main.disconnectWhenUICloses(connection);
-
-        for (int i = 3; i < args.length; ++i)
-            main.joinAuction(connection, args[i]);
+        main.addUserRequestListenerFor(connection);
     }
 
     private static String auctionId(String itemId, XMPPConnection connection) {
@@ -72,27 +70,26 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
-    private void joinAuction(XMPPConnection connection, String itemId) throws Exception {
-        Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
-        notToBeGCd.add(chat);
-
-        Auction auction = new XMPPAuction(chat);
-        chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(),
-                new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers))));
-        safelyAddItemToModel(itemId);
-        auction.join();
-    }
-
-    private void safelyAddItemToModel(String itemId) throws Exception {
-        SwingUtilities.invokeAndWait(() -> snipers.addSniper(SniperSnapshot.joining(itemId)));
-    }
-
     private void disconnectWhenUICloses(XMPPConnection connection) {
         ui.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 connection.disconnect();
             }
+        });
+    }
+
+    private void addUserRequestListenerFor(XMPPConnection connection) {
+        ui.addUserRequestListener(itemId -> {
+            snipers.addSniper(SniperSnapshot.joining(itemId));
+            Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
+
+            notToBeGCd.add(chat);
+
+            Auction auction = new XMPPAuction(chat);
+            chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(),
+                    new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers))));
+            auction.join();
         });
     }
 
