@@ -27,9 +27,6 @@ public class ApplicationRunner extends ExternalResource {
     }
 
     private void startSniper() {
-        // Needed by WindowLicker on OSX
-        System.setProperty("com.objogate.wl.keyboard", "Mac-GB");
-
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
@@ -42,7 +39,7 @@ public class ApplicationRunner extends ExternalResource {
         };
         thread.setDaemon(true);
         thread.start();
-        driver = new AuctionSniperDriver(1000);
+        driver = AuctionSniperDriver.withTimeout(1000);
         driver.hasTitle(MainWindow.APPLICATION_TITLE);
         driver.hasColumnTitles();
     }

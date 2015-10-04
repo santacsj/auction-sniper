@@ -17,7 +17,13 @@ import com.objogate.wl.swing.matcher.JLabelTextMatcher;
 @SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
 
-    public AuctionSniperDriver(int timeoutMillis) {
+    public static AuctionSniperDriver withTimeout(int timeoutMillis) {
+        // Needed by WindowLicker on OSX
+        System.setProperty("com.objogate.wl.keyboard", "Mac-GB");
+        return new AuctionSniperDriver(timeoutMillis);
+    }
+
+    private AuctionSniperDriver(int timeoutMillis) {
         super(new GesturePerformer(), JFrameDriver.topLevelFrame(named(Main.MAIN_WINDOW_NAME),
                 showingOnScreen()), new AWTEventQueueProber(timeoutMillis, 100));
     }
