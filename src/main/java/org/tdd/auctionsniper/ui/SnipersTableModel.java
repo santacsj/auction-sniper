@@ -21,7 +21,7 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 
     @Override
     public int getRowCount() {
-        return 1;
+        return snapshots.size();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return Column.at(columnIndex).valueIn(snapshot);
+        return Column.at(columnIndex).valueIn(snapshots.get(rowIndex));
     }
 
     @Override
@@ -46,8 +46,9 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
     }
 
     public void addSniper(SniperSnapshot snapshot) {
+        int rowIndex = getRowCount();
         snapshots.add(snapshot);
-        fireTableRowsInserted(0, 0);
+        fireTableRowsInserted(rowIndex, rowIndex);
     }
 
 }

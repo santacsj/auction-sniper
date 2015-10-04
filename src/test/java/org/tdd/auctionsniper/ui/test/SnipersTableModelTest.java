@@ -92,7 +92,7 @@ public class SnipersTableModelTest {
         assertColumnEquals(Column.ITEM_IDENTIFIER, snapshot.itemId);
         assertColumnEquals(Column.LAST_PRICE, snapshot.lastPrice);
         assertColumnEquals(Column.LAST_BID, snapshot.lastBid);
-        assertColumnEquals(Column.SNIPER_STATE, snapshot.state);
+        assertColumnEquals(Column.SNIPER_STATE, SnipersTableModel.textFor(snapshot.state));
     }
 
 }
