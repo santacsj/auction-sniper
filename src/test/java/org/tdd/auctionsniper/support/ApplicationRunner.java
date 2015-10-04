@@ -3,8 +3,7 @@ package org.tdd.auctionsniper.support;
 import static org.tdd.auctionsniper.support.FakeAuctionServer.*;
 
 import org.junit.rules.ExternalResource;
-import org.tdd.auctionsniper.Main;
-import org.tdd.auctionsniper.SniperState;
+import org.tdd.auctionsniper.*;
 import org.tdd.auctionsniper.ui.MainWindow;
 import org.tdd.auctionsniper.ui.SnipersTableModel;
 
@@ -33,9 +32,12 @@ public class ApplicationRunner extends ExternalResource {
         driver = new AuctionSniperDriver(1000);
         driver.hasTitle(MainWindow.APPLICATION_TITLE);
         driver.hasColumnTitles();
-        driver.showsSniperStatus(SnipersTableModel.JOINING.itemId,
-                SnipersTableModel.JOINING.lastPrice, SnipersTableModel.JOINING.lastBid,
-                SnipersTableModel.textFor(SnipersTableModel.JOINING.state));
+
+        for (FakeAuctionServer auction : auctions) {
+            SniperSnapshot joining = SniperSnapshot.joining(auction.getItemId());
+            driver.showsSniperStatus(joining.itemId, joining.lastPrice, joining.lastBid,
+                    SnipersTableModel.textFor(joining.state));
+        }
     }
 
     protected static String[] arguments(FakeAuctionServer... auctions) {
