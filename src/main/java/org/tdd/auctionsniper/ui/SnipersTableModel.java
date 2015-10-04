@@ -1,5 +1,8 @@
 package org.tdd.auctionsniper.ui;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
 
 import org.tdd.auctionsniper.*;
@@ -7,13 +10,14 @@ import org.tdd.auctionsniper.*;
 @SuppressWarnings("serial")
 public class SnipersTableModel extends AbstractTableModel implements SniperListener {
     private static final String[] STATUS_TEXT = { "Joining", "Bidding", "Winning", "Lost", "Won" };
-    public static final SniperSnapshot JOINING = new SniperSnapshot("", 0, 0, SniperState.JOINING);
+    public static final SniperSnapshot JOINING = SniperSnapshot.joining("");
 
     public static String textFor(SniperState state) {
         return STATUS_TEXT[state.ordinal()];
     }
 
     private SniperSnapshot snapshot = JOINING;
+    private List<SniperSnapshot> snapshots = new LinkedList<SniperSnapshot>();
 
     @Override
     public int getRowCount() {
@@ -39,6 +43,11 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
     public void sniperStateChanged(SniperSnapshot newSnapshot) {
         this.snapshot = newSnapshot;
         fireTableRowsUpdated(0, 0);
+    }
+
+    public void addSniper(SniperSnapshot snapshot) {
+        snapshots.add(snapshot);
+        fireTableRowsInserted(0, 0);
     }
 
 }

@@ -31,7 +31,6 @@ public class Main {
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
     private static final int ARG_PASSWORD = 2;
-    private static final int ARG_ITEM_ID = 3;
 
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -73,14 +72,19 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
-    private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+    private void joinAuction(XMPPConnection connection, String itemId) throws Exception {
         Chat chat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
         notToBeGCd.add(chat);
 
         Auction auction = new XMPPAuction(chat);
         chat.addMessageListener(new AuctionMessageTranslator(connection.getUser(),
                 new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers))));
+        safelyAddItemToModel(itemId);
         auction.join();
+    }
+
+    private void safelyAddItemToModel(String itemId) throws Exception {
+        SwingUtilities.invokeAndWait(() -> snipers.addSniper(SniperSnapshot.joining(itemId)));
     }
 
     private void disconnectWhenUICloses(XMPPConnection connection) {
