@@ -1,9 +1,12 @@
 package org.tdd.auctionsniper.support;
 
+import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.table.JTableHeader;
 
 import org.hamcrest.Matchers;
 import org.tdd.auctionsniper.Main;
+import org.tdd.auctionsniper.ui.MainWindow;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.*;
@@ -41,4 +44,21 @@ public class AuctionSniperDriver extends JFrameDriver {
                 JLabelTextMatcher.withLabelText("State")));
 
     }
+
+    public void startBiddingFor(String itemId) {
+        itemIdField().replaceAllText(itemId);
+        bidButton().click();
+    }
+
+    private JTextFieldDriver itemIdField() {
+        JTextFieldDriver newItemId = new JTextFieldDriver(this, JTextField.class,
+                named(MainWindow.NEW_ITEM_ID_NAME));
+        newItemId.focusWithMouse();
+        return newItemId;
+    }
+
+    private JButtonDriver bidButton() {
+        return new JButtonDriver(this, JButton.class, named(MainWindow.JOIN_BUTTON_NAME));
+    }
+
 }

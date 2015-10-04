@@ -3,7 +3,8 @@ package org.tdd.auctionsniper.support;
 import static org.tdd.auctionsniper.support.FakeAuctionServer.*;
 
 import org.junit.rules.ExternalResource;
-import org.tdd.auctionsniper.*;
+import org.tdd.auctionsniper.Main;
+import org.tdd.auctionsniper.SniperState;
 import org.tdd.auctionsniper.ui.MainWindow;
 import org.tdd.auctionsniper.ui.SnipersTableModel;
 
@@ -17,6 +18,15 @@ public class ApplicationRunner extends ExternalResource {
     private AuctionSniperDriver driver;
 
     public void startBiddingIn(FakeAuctionServer... auctions) {
+        startSniper(auctions);
+        for (FakeAuctionServer auction : auctions) {
+            String itemId = auction.getItemId();
+            driver.startBiddingFor(itemId);
+            driver.showsSniperStatus(itemId, 0, 0, SnipersTableModel.textFor(SniperState.JOINING));
+        }
+    }
+
+    private void startSniper(FakeAuctionServer... auctions) {
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
@@ -32,12 +42,6 @@ public class ApplicationRunner extends ExternalResource {
         driver = new AuctionSniperDriver(1000);
         driver.hasTitle(MainWindow.APPLICATION_TITLE);
         driver.hasColumnTitles();
-
-        for (FakeAuctionServer auction : auctions) {
-            SniperSnapshot joining = SniperSnapshot.joining(auction.getItemId());
-            driver.showsSniperStatus(joining.itemId, joining.lastPrice, joining.lastBid,
-                    SnipersTableModel.textFor(joining.state));
-        }
     }
 
     protected static String[] arguments(FakeAuctionServer... auctions) {

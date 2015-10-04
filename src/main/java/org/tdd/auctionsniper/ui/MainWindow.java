@@ -11,6 +11,8 @@ import org.tdd.auctionsniper.Main;
 public class MainWindow extends JFrame {
     public static final String SNIPERS_TABLE_NAME = "snipers table";
     public static final String APPLICATION_TITLE = "Auction Sniper";
+    public static final String NEW_ITEM_ID_NAME = "item id";
+    public static final String JOIN_BUTTON_NAME = "join button";
 
     public MainWindow(SnipersTableModel snipers) {
         super("Auction Sniper");
