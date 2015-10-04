@@ -1,6 +1,7 @@
 # This playbook sets up a development environment
 ---
 - hosts: xmpp-server
+  gather_facts: no
   sudo: yes
   
   tasks:
@@ -13,8 +14,8 @@
     - name: set resource policy 'Never kick'
       lineinfile: dest=/etc/prosody/conf.d/localhost.cfg.lua line='conflict_resolve = "kick_new";'
 
-    - name: start 'prosody'
-      service: name=prosody state=started
+    - name: ensure 'prosody' is started
+      service: name=prosody state=started enabled=yes
     
     - name: register users
       shell: prosodyctl register {{ item.name }} localhost {{ item.password }}
@@ -25,6 +26,3 @@
       
     - name: restart 'prosody'
       service: name=prosody state=restarted
-
-    - name: wait for 'prosody' restart to complete
-      wait_for: path=/var/run/prosody/prosody.pid state=present
