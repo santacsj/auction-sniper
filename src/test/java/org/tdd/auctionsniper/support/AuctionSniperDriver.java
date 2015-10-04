@@ -59,7 +59,10 @@ public class AuctionSniperDriver extends JFrameDriver {
          * workaround for OSX
          * see http://stackoverflow.com/questions/23316432/windowlicker-is-not-working-on-os-x
          */
-        itemIdField().component().component().setText(itemId);
+        JTextFieldDriver itemIdField = itemIdField();
+        itemIdField.clearText();
+        itemIdField.typeText(itemId);
+        itemIdField.component().component().setText(itemId);
         bidButton().click();
     }
 
@@ -67,7 +70,6 @@ public class AuctionSniperDriver extends JFrameDriver {
         JTextFieldDriver newItemId = new JTextFieldDriver(this, JTextField.class,
                 named(MainWindow.NEW_ITEM_ID_NAME));
         newItemId.focusWithMouse();
-        newItemId.clearText();
         return newItemId;
     }
 
