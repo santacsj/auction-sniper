@@ -1,9 +1,12 @@
 package org.tdd.auctionsniper.support;
 
+import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.table.JTableHeader;
 
 import org.hamcrest.Matchers;
 import org.tdd.auctionsniper.Main;
+import org.tdd.auctionsniper.ui.MainWindow;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.*;
@@ -14,7 +17,16 @@ import com.objogate.wl.swing.matcher.JLabelTextMatcher;
 @SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
 
-    public AuctionSniperDriver(int timeoutMillis) {
+    public static AuctionSniperDriver withTimeout(int timeoutMillis) {
+        /*
+         * workaround for OSX
+         * see http://stackoverflow.com/questions/23316432/windowlicker-is-not-working-on-os-x
+         */
+        System.setProperty("com.objogate.wl.keyboard", "Mac-GB");
+        return new AuctionSniperDriver(timeoutMillis);
+    }
+
+    private AuctionSniperDriver(int timeoutMillis) {
         super(new GesturePerformer(), JFrameDriver.topLevelFrame(named(Main.MAIN_WINDOW_NAME),
                 showingOnScreen()), new AWTEventQueueProber(timeoutMillis, 100));
     }
@@ -41,4 +53,26 @@ public class AuctionSniperDriver extends JFrameDriver {
                 JLabelTextMatcher.withLabelText("State")));
 
     }
+
+    public void startBiddingFor(String itemId) {
+        /*
+         * workaround for OSX
+         * see http://stackoverflow.com/questions/23316432/windowlicker-is-not-working-on-os-x
+         */
+        itemIdField().component().component().setText(itemId);
+        bidButton().click();
+    }
+
+    private JTextFieldDriver itemIdField() {
+        JTextFieldDriver newItemId = new JTextFieldDriver(this, JTextField.class,
+                named(MainWindow.NEW_ITEM_ID_NAME));
+        newItemId.focusWithMouse();
+        newItemId.clearText();
+        return newItemId;
+    }
+
+    private JButtonDriver bidButton() {
+        return new JButtonDriver(this, JButton.class, named(MainWindow.JOIN_BUTTON_NAME));
+    }
+
 }

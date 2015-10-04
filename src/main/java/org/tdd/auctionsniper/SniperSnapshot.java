@@ -31,6 +31,10 @@ public class SniperSnapshot {
         return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionClosed());
     }
 
+    public boolean isForSameItemAs(SniperSnapshot that) {
+        return itemId.equals(that.itemId);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
