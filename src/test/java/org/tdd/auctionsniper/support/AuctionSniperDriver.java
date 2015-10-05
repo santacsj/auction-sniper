@@ -1,9 +1,12 @@
 package org.tdd.auctionsniper.support;
 
+import java.awt.Component;
+
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.table.JTableHeader;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.tdd.auctionsniper.Main;
 import org.tdd.auctionsniper.ui.MainWindow;
@@ -16,6 +19,32 @@ import com.objogate.wl.swing.matcher.JLabelTextMatcher;
 
 @SuppressWarnings("unchecked")
 public class AuctionSniperDriver extends JFrameDriver {
+
+    private static class JTextFieldDriverPatchedForOSX extends JTextFieldDriver {
+
+        @SafeVarargs
+        public JTextFieldDriverPatchedForOSX(ComponentDriver<? extends Component> parentOrOwner,
+                Class<JTextField> componentType, Matcher<? super JTextField>... matcher) {
+            super(parentOrOwner, componentType, matcher);
+        }
+
+        /*
+         * workaround for OSX
+         * see http://stackoverflow.com/questions/23316432/windowlicker-is-not-working-on-os-x
+         */
+        @Override
+        public void replaceAllText(String text) {
+            // use original method ...
+            super.replaceAllText(text);
+
+            // ... but if the original did not work, use brute force
+            JTextField jTextField = component().component();
+
+            if (!text.equals(jTextField.getText()))
+                jTextField.setText(text);
+        }
+
+    }
 
     public static AuctionSniperDriver withTimeout(int timeoutMillis) {
         /*
@@ -55,19 +84,12 @@ public class AuctionSniperDriver extends JFrameDriver {
     }
 
     public void startBiddingFor(String itemId) {
-        /*
-         * workaround for OSX
-         * see http://stackoverflow.com/questions/23316432/windowlicker-is-not-working-on-os-x
-         */
-        JTextFieldDriver itemIdField = itemIdField();
-        itemIdField.clearText();
-        itemIdField.typeText(itemId);
-        itemIdField.component().component().setText(itemId);
+        itemIdField().replaceAllText(itemId);
         bidButton().click();
     }
 
     private JTextFieldDriver itemIdField() {
-        JTextFieldDriver newItemId = new JTextFieldDriver(this, JTextField.class,
+        JTextFieldDriver newItemId = new JTextFieldDriverPatchedForOSX(this, JTextField.class,
                 named(MainWindow.NEW_ITEM_ID_NAME));
         newItemId.focusWithMouse();
         return newItemId;
