@@ -6,4 +6,6 @@ public interface Auction {
 
     void bid(int amount);
 
+    void addAuctionEventListener(AuctionEventListener listener);
+
 }
