@@ -11,6 +11,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.tdd.auctionsniper.ui.MainWindow;
 import org.tdd.auctionsniper.ui.SnipersTableModel;
+import org.tdd.auctionsniper.xmpp.XMPPAuction;
 
 public class Main {
 

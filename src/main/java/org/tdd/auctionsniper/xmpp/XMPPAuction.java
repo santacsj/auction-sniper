@@ -1,12 +1,13 @@
-package org.tdd.auctionsniper;
+package org.tdd.auctionsniper.xmpp;
 
 import org.jivesoftware.smack.*;
 import org.jmock.example.announcer.Announcer;
+import org.tdd.auctionsniper.*;
 
 public class XMPPAuction implements Auction {
 
-    public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
     public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
+    public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 
     private static final String AUCTION_ID_FORMAT = Main.ITEM_ID_AS_LOGIN + "@%s/"
             + Main.AUCTION_RESOURCE;

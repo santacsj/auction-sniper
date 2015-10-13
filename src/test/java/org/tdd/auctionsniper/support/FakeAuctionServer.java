@@ -7,7 +7,7 @@ import org.hamcrest.Matcher;
 import org.jivesoftware.smack.*;
 import org.junit.Assert;
 import org.junit.rules.ExternalResource;
-import org.tdd.auctionsniper.XMPPAuction;
+import org.tdd.auctionsniper.xmpp.XMPPAuction;
 
 public class FakeAuctionServer extends ExternalResource {
 
