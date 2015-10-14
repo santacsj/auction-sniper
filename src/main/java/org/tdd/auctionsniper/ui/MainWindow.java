@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import org.jmock.example.announcer.Announcer;
 import org.tdd.auctionsniper.Main;
+import org.tdd.auctionsniper.SniperPortfolio;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
@@ -16,11 +17,11 @@ public class MainWindow extends JFrame {
 
     private Announcer<UserRequestListener> userRequests = Announcer.to(UserRequestListener.class);
 
-    public MainWindow(SnipersTableModel snipers) {
+    public MainWindow(SniperPortfolio portfolio) {
         super("Auction Sniper");
         setName(Main.MAIN_WINDOW_NAME);
         setTitle(APPLICATION_TITLE);
-        fillContentPane(makeSnipersTable(snipers), makeControls());
+        fillContentPane(makeSnipersTable(portfolio), makeControls());
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -33,8 +34,10 @@ public class MainWindow extends JFrame {
         contentPane.add(controlsPanel, BorderLayout.NORTH);
     }
 
-    private JTable makeSnipersTable(SnipersTableModel snipers) {
-        JTable sniperTable = new JTable(snipers);
+    private JTable makeSnipersTable(SniperPortfolio portfolio) {
+        SnipersTableModel model = new SnipersTableModel();
+        portfolio.addPortfolioListener(model);
+        JTable sniperTable = new JTable(model);
         sniperTable.setName(SNIPERS_TABLE_NAME);
         return sniperTable;
     }

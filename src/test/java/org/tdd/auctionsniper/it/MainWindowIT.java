@@ -3,15 +3,15 @@ package org.tdd.auctionsniper.it;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Test;
+import org.tdd.auctionsniper.SniperPortfolio;
 import org.tdd.auctionsniper.support.AuctionSniperDriver;
 import org.tdd.auctionsniper.ui.MainWindow;
-import org.tdd.auctionsniper.ui.SnipersTableModel;
 
 import com.objogate.wl.swing.probe.ValueMatcherProbe;
 
 public class MainWindowIT {
-    private final SnipersTableModel tableModel = new SnipersTableModel();
-    private final MainWindow mainWindow = new MainWindow(tableModel);
+    private final SniperPortfolio portfolio = new SniperPortfolio();
+    private final MainWindow mainWindow = new MainWindow(portfolio);
     private final AuctionSniperDriver driver = AuctionSniperDriver.withTimeout(1000);
 
     @Test

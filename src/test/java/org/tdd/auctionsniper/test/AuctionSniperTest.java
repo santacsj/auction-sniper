@@ -4,8 +4,7 @@ import org.hamcrest.*;
 import org.jmock.Expectations;
 import org.jmock.States;
 import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.tdd.auctionsniper.*;
 import org.tdd.auctionsniper.AuctionEventListener.PriceSource;
 
@@ -19,7 +18,12 @@ public class AuctionSniperTest {
     private final SniperListener sniperListener = context.mock(SniperListener.class);
     private final Auction auction = context.mock(Auction.class);
     private final States sniperState = context.states("sniper");
-    private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction, sniperListener);
+    private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction);
+
+    @Before
+    public void setUpAuctionSniper() {
+        sniper.addSniperListener(sniperListener);
+    }
 
     @Test
     public void reportsLostWhenAuctionClosesImmediately() {
@@ -93,7 +97,6 @@ public class AuctionSniperTest {
     public void reportsWonIfAuctionClosesWhenWinning() {
         context.checking(new Expectations() {
             {
-
                 ignoring(auction);
 
                 allowing(sniperListener).sniperStateChanged(

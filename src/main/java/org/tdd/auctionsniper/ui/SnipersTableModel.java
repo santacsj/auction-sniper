@@ -8,7 +8,8 @@ import javax.swing.table.AbstractTableModel;
 import org.tdd.auctionsniper.*;
 
 @SuppressWarnings("serial")
-public class SnipersTableModel extends AbstractTableModel implements SniperListener {
+public class SnipersTableModel extends AbstractTableModel implements SniperListener,
+        PortfolioListener {
     private static final String[] STATUS_TEXT = { "Joining", "Bidding", "Winning", "Lost", "Won" };
     public static final SniperSnapshot JOINING = SniperSnapshot.joining("");
 
@@ -17,6 +18,18 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
     }
 
     private List<SniperSnapshot> snapshots = new LinkedList<SniperSnapshot>();
+
+    @Override
+    public void sniperAdded(AuctionSniper sniper) {
+        addSniper(sniper.getSnapshot());
+        sniper.addSniperListener(new Main.SwingThreadSniperListener(this));
+    }
+
+    public void addSniper(SniperSnapshot snapshot) {
+        int rowIndex = getRowCount();
+        snapshots.add(snapshot);
+        fireTableRowsInserted(rowIndex, rowIndex);
+    }
 
     @Override
     public int getRowCount() {
@@ -51,12 +64,6 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
                 return i;
         }
         throw new Defect("Cannot find match for " + snapshot);
-    }
-
-    public void addSniper(SniperSnapshot snapshot) {
-        int rowIndex = getRowCount();
-        snapshots.add(snapshot);
-        fireTableRowsInserted(rowIndex, rowIndex);
     }
 
 }
