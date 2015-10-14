@@ -2,8 +2,6 @@ package org.tdd.auctionsniper;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
@@ -13,7 +11,7 @@ import org.tdd.auctionsniper.xmpp.XMPPAuctionHouse;
 
 public class Main {
 
-    public class SwingThreadSniperListener implements SniperListener {
+    public static class SwingThreadSniperListener implements SniperListener {
 
         private final SniperListener listener;
 
@@ -44,10 +42,8 @@ public class Main {
 
     private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
-    private Set<Auction> notToBeGCd;
 
     public Main() throws Exception {
-        this.notToBeGCd = new HashSet<Auction>();
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
@@ -61,13 +57,6 @@ public class Main {
     }
 
     private void addUserRequestListenerFor(AuctionHouse auctionHouse) {
-        ui.addUserRequestListener(itemId -> {
-            snipers.addSniper(SniperSnapshot.joining(itemId));
-            Auction auction = auctionHouse.auctionFor(itemId);
-            notToBeGCd.add(auction);
-            auction.addAuctionEventListener(new AuctionSniper(itemId, auction,
-                    new SwingThreadSniperListener(snipers)));
-            auction.join();
-        });
+        ui.addUserRequestListener(new SniperLauncher(auctionHouse, snipers));
     }
 }
