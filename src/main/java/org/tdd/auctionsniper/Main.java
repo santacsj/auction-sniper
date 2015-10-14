@@ -7,11 +7,9 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
 import org.tdd.auctionsniper.ui.MainWindow;
 import org.tdd.auctionsniper.ui.SnipersTableModel;
-import org.tdd.auctionsniper.xmpp.XMPPAuction;
+import org.tdd.auctionsniper.xmpp.XMPPAuctionHouse;
 
 public class Main {
 
@@ -40,18 +38,10 @@ public class Main {
 
     public static void main(String... args) throws Exception {
         Main main = new Main();
-        XMPPConnection connection = connection(args[ARG_HOSTNAME], args[ARG_USERNAME],
-                args[ARG_PASSWORD]);
-        main.disconnectWhenUICloses(connection);
-        main.addUserRequestListenerFor(connection);
-    }
-
-    private static XMPPConnection connection(String hostname, String username, String password)
-            throws XMPPException {
-        XMPPConnection connection = new XMPPConnection(hostname);
-        connection.connect();
-        connection.login(username, password, AUCTION_RESOURCE);
-        return connection;
+        XMPPAuctionHouse auctionHouse = XMPPAuctionHouse.connect(args[ARG_HOSTNAME],
+                args[ARG_USERNAME], args[ARG_PASSWORD]);
+        main.disconnectWhenUICloses(auctionHouse);
+        main.addUserRequestListenerFor(auctionHouse);
     }
 
     private final SnipersTableModel snipers = new SnipersTableModel();
@@ -63,19 +53,19 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
     }
 
-    private void disconnectWhenUICloses(XMPPConnection connection) {
+    private void disconnectWhenUICloses(AuctionHouse auctionHouse) {
         ui.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                connection.disconnect();
+                auctionHouse.disconnect();
             }
         });
     }
 
-    private void addUserRequestListenerFor(XMPPConnection connection) {
+    private void addUserRequestListenerFor(AuctionHouse auctionHouse) {
         ui.addUserRequestListener(itemId -> {
             snipers.addSniper(SniperSnapshot.joining(itemId));
-            Auction auction = new XMPPAuction(connection, itemId);
+            Auction auction = auctionHouse.auctionFor(itemId);
             notToBeGCd.add(auction);
             auction.addAuctionEventListener(new AuctionSniper(itemId, auction,
                     new SwingThreadSniperListener(snipers)));
