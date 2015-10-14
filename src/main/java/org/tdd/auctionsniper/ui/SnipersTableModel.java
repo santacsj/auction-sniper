@@ -1,6 +1,7 @@
 package org.tdd.auctionsniper.ui;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -8,7 +9,7 @@ import org.tdd.auctionsniper.*;
 
 @SuppressWarnings("serial")
 public class SnipersTableModel extends AbstractTableModel implements SniperListener,
-        SniperCollector {
+        PortfolioListener {
     private static final String[] STATUS_TEXT = { "Joining", "Bidding", "Winning", "Lost", "Won" };
     public static final SniperSnapshot JOINING = SniperSnapshot.joining("");
 
@@ -17,11 +18,9 @@ public class SnipersTableModel extends AbstractTableModel implements SniperListe
     }
 
     private List<SniperSnapshot> snapshots = new LinkedList<SniperSnapshot>();
-    private final ArrayList<AuctionSniper> notToBeGCd = new ArrayList<AuctionSniper>();
 
     @Override
-    public void addSniper(AuctionSniper sniper) {
-        notToBeGCd.add(sniper);
+    public void sniperAdded(AuctionSniper sniper) {
         addSniper(sniper.getSnapshot());
         sniper.addSniperListener(new Main.SwingThreadSniperListener(this));
     }

@@ -11,7 +11,7 @@ import com.objogate.wl.swing.probe.ValueMatcherProbe;
 
 public class MainWindowIT {
     private final SnipersTableModel tableModel = new SnipersTableModel();
-    private final MainWindow mainWindow = new MainWindow(tableModel);
+    private final MainWindow mainWindow = new MainWindow(tableModel, null);
     private final AuctionSniperDriver driver = AuctionSniperDriver.withTimeout(1000);
 
     @Test

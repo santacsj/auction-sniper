@@ -44,7 +44,7 @@ public class Main {
     private MainWindow ui;
 
     public Main() throws Exception {
-        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers));
+        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers, null));
     }
 
     private void disconnectWhenUICloses(AuctionHouse auctionHouse) {
@@ -57,6 +57,6 @@ public class Main {
     }
 
     private void addUserRequestListenerFor(AuctionHouse auctionHouse) {
-        ui.addUserRequestListener(new SniperLauncher(auctionHouse, snipers));
+        ui.addUserRequestListener(new SniperLauncher(auctionHouse, null));
     }
 }
