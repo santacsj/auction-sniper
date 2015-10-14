@@ -1,28 +1,22 @@
 package org.tdd.auctionsniper;
 
-import java.util.ArrayList;
-
-import org.tdd.auctionsniper.Main.SwingThreadSniperListener;
-import org.tdd.auctionsniper.ui.SnipersTableModel;
 import org.tdd.auctionsniper.ui.UserRequestListener;
 
 public class SniperLauncher implements UserRequestListener {
-    private final ArrayList<Auction> notToBeGCd = new ArrayList<Auction>();
     private final AuctionHouse auctionHouse;
-    private final SnipersTableModel snipers;
+    private final SniperCollector collector;
 
-    public SniperLauncher(AuctionHouse auctionHouse, SnipersTableModel snipers) {
+    public SniperLauncher(AuctionHouse auctionHouse, SniperCollector collector) {
         this.auctionHouse = auctionHouse;
-        this.snipers = snipers;
+        this.collector = collector;
     }
 
     @Override
     public void joinAuction(String itemId) {
-        snipers.addSniper(SniperSnapshot.joining(itemId));
         Auction auction = auctionHouse.auctionFor(itemId);
-        notToBeGCd.add(auction);
-        auction.addAuctionEventListener(new AuctionSniper(itemId, auction,
-                new SwingThreadSniperListener(snipers)));
+        AuctionSniper sniper = new AuctionSniper(itemId, auction, null);
+        auction.addAuctionEventListener(sniper);
+        collector.addSniper(sniper);
         auction.join();
     }
 
