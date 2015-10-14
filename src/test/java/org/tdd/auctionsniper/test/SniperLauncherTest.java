@@ -44,6 +44,6 @@ public class SniperLauncherTest {
     }
 
     private Matcher<AuctionSniper> sniperForItem(String itemId) {
-        return SamePropertyValuesAs.samePropertyValuesAs(new AuctionSniper(itemId, auction, null));
+        return SamePropertyValuesAs.samePropertyValuesAs(new AuctionSniper(itemId, auction));
     }
 }

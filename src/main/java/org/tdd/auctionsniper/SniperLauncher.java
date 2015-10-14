@@ -14,7 +14,7 @@ public class SniperLauncher implements UserRequestListener {
     @Override
     public void joinAuction(String itemId) {
         Auction auction = auctionHouse.auctionFor(itemId);
-        AuctionSniper sniper = new AuctionSniper(itemId, auction, null);
+        AuctionSniper sniper = new AuctionSniper(itemId, auction);
         auction.addAuctionEventListener(sniper);
         collector.addSniper(sniper);
         auction.join();

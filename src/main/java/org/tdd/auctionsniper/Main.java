@@ -57,6 +57,6 @@ public class Main {
     }
 
     private void addUserRequestListenerFor(AuctionHouse auctionHouse) {
-        ui.addUserRequestListener(new SniperLauncher(auctionHouse, null));
+        ui.addUserRequestListener(new SniperLauncher(auctionHouse, snipers));
     }
 }
