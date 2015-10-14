@@ -2,28 +2,22 @@ package org.tdd.auctionsniper.xmpp;
 
 import org.jivesoftware.smack.*;
 import org.jmock.example.announcer.Announcer;
-import org.tdd.auctionsniper.*;
+import org.tdd.auctionsniper.Auction;
+import org.tdd.auctionsniper.AuctionEventListener;
 
 public class XMPPAuction implements Auction {
 
     public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
     public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 
-    private static final String AUCTION_ID_FORMAT = Main.ITEM_ID_AS_LOGIN + "@%s/"
-            + Main.AUCTION_RESOURCE;
-
-    private static String auctionId(String itemId, XMPPConnection connection) {
-        return String.format(XMPPAuction.AUCTION_ID_FORMAT, itemId, connection.getServiceName());
-    }
-
     private final Announcer<AuctionEventListener> auctionEventListeners = Announcer
             .to(AuctionEventListener.class);
     private final Chat chat;
 
-    public XMPPAuction(XMPPConnection connection, String itemId) {
+    public XMPPAuction(XMPPConnection connection, String auctionId) {
         this.chat = connection.getChatManager()
                 .createChat(
-                        auctionId(itemId, connection),
+                        auctionId,
                         new AuctionMessageTranslator(connection.getUser(), auctionEventListeners
                                 .announce()));
     }
