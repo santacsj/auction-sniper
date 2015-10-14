@@ -6,7 +6,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.SwingUtilities;
 
 import org.tdd.auctionsniper.ui.MainWindow;
-import org.tdd.auctionsniper.ui.SnipersTableModel;
 import org.tdd.auctionsniper.xmpp.XMPPAuctionHouse;
 
 public class Main {
@@ -40,11 +39,11 @@ public class Main {
         main.addUserRequestListenerFor(auctionHouse);
     }
 
-    private final SnipersTableModel snipers = new SnipersTableModel();
+    private final SniperPortfolio portfolio = new SniperPortfolio();
     private MainWindow ui;
 
     public Main() throws Exception {
-        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(snipers, null));
+        SwingUtilities.invokeAndWait(() -> ui = new MainWindow(portfolio));
     }
 
     private void disconnectWhenUICloses(AuctionHouse auctionHouse) {
@@ -57,6 +56,6 @@ public class Main {
     }
 
     private void addUserRequestListenerFor(AuctionHouse auctionHouse) {
-        ui.addUserRequestListener(new SniperLauncher(auctionHouse, null));
+        ui.addUserRequestListener(new SniperLauncher(auctionHouse, portfolio));
     }
 }
