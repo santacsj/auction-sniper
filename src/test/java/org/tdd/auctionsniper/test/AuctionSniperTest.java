@@ -18,8 +18,7 @@ public class AuctionSniperTest {
     private final SniperListener sniperListener = context.mock(SniperListener.class);
     private final Auction auction = context.mock(Auction.class);
     private final States sniperState = context.states("sniper");
-    private final AuctionSniper sniper = new AuctionSniper(new Item(ITEM_ID, Integer.MAX_VALUE),
-            auction);
+    private final AuctionSniper sniper = new AuctionSniper(new Item(ITEM_ID, 1100), auction);
 
     @Before
     public void setUpAuctionSniper() {
@@ -112,6 +111,37 @@ public class AuctionSniperTest {
 
         sniper.currentPrice(123, 45, PriceSource.FromSniper);
         sniper.auctionClosed();
+    }
+
+    @Test
+    public void doesNotBidAndReportsLosingIfSubsequentPriceIsAboveStopPrice() {
+        allowingSniperBidding();
+        context.checking(new Expectations() {
+            {
+                int bid = 123 + 45;
+                allowing(auction).bid(bid);
+                atLeast(1).of(sniperListener).sniperStateChanged(
+                        new SniperSnapshot(ITEM_ID, 2345, bid, SniperState.LOSING));
+                when(sniperState.is("bidding"));
+            }
+        });
+        sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
+        sniper.currentPrice(2345, 25, PriceSource.FromOtherBidder);
+    }
+
+    // TODO doesNotBidAndReportsLosingIfFirstPriceIsAboveStopPrice()
+    // TODO reportsLostIfAuctionClosesWhenLosing()
+    // TODO continuesToBeLosingOnceStopPriceHasBeenReached()
+    // TODO doesNotBidAndReportsLosingIfPriceAfterWinningIsAboveStopPrice()
+
+    private void allowingSniperBidding() {
+        context.checking(new Expectations() {
+            {
+                allowing(sniperListener).sniperStateChanged(
+                        with(aSniperThatIs(SniperState.BIDDING)));
+                then(sniperState.is("bidding"));
+            }
+        });
     }
 
     private Matcher<SniperSnapshot> aSniperThatIs(SniperState state) {

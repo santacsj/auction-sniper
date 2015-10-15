@@ -10,6 +10,10 @@ public class Item {
         this.stopPrice = stopPrice;
     }
 
+    public boolean allowsBid(int bid) {
+        return bid <= stopPrice;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
