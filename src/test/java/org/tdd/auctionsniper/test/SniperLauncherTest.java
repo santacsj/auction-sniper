@@ -23,16 +23,16 @@ public class SniperLauncherTest {
 
     @Test
     public void addsNewSniperToCollectorAndThenJoinsAuction() {
-        String itemId = "item 123";
+        Item item = new Item("item 123", Integer.MAX_VALUE);
         context.checking(new Expectations() {
             {
-                allowing(auctionHouse).auctionFor(itemId);
+                allowing(auctionHouse).auctionFor(item);
                 will(returnValue(auction));
 
-                oneOf(auction).addAuctionEventListener(with(sniperForItem(itemId)));
+                oneOf(auction).addAuctionEventListener(with(sniperForItem(item)));
                 when(auctionState.is("not joined"));
 
-                oneOf(collector).addSniper(with(sniperForItem(itemId)));
+                oneOf(collector).addSniper(with(sniperForItem(item)));
                 when(auctionState.is("not joined"));
 
                 oneOf(auction).join();
@@ -40,10 +40,10 @@ public class SniperLauncherTest {
             }
         });
 
-        launcher.joinAuction(itemId);
+        launcher.joinAuction(item);
     }
 
-    private Matcher<AuctionSniper> sniperForItem(String itemId) {
-        return SamePropertyValuesAs.samePropertyValuesAs(new AuctionSniper(itemId, auction));
+    private Matcher<AuctionSniper> sniperForItem(Item item) {
+        return SamePropertyValuesAs.samePropertyValuesAs(new AuctionSniper(item, auction));
     }
 }

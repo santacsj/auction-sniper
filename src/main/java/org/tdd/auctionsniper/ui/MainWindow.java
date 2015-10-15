@@ -1,6 +1,8 @@
 package org.tdd.auctionsniper.ui;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -61,8 +63,22 @@ public class MainWindow extends JFrame {
 
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_BUTTON_NAME);
-        joinAuctionButton.addActionListener(e -> userRequests.announce().joinAuction(
-                itemIdField.getText()));
+        joinAuctionButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                userRequests.announce().joinAuction(new Item(getItemId(), getStopPrice()));
+            }
+
+            private String getItemId() {
+                return itemIdField.getText();
+            }
+
+            private int getStopPrice() {
+                return Integer.parseInt(stopPriceField.getText()); // NPE when ((Number)
+                                                                   // stopPriceField.getValue()).intValue();
+            }
+        });
         controls.add(joinAuctionButton);
         return controls;
     }
