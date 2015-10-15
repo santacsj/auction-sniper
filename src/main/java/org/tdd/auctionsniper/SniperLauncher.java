@@ -1,6 +1,5 @@
 package org.tdd.auctionsniper;
 
-import org.tdd.auctionsniper.ui.UserRequestListener;
 
 public class SniperLauncher implements UserRequestListener {
     private final AuctionHouse auctionHouse;
@@ -12,7 +11,7 @@ public class SniperLauncher implements UserRequestListener {
     }
 
     @Override
-    public void joinAuction(String itemId) {
+    public void joinAuction(Item item) {
         Auction auction = auctionHouse.auctionFor(itemId);
         AuctionSniper sniper = new AuctionSniper(itemId, auction);
         auction.addAuctionEventListener(sniper);

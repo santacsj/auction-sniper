@@ -3,6 +3,7 @@ package org.tdd.auctionsniper.it;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Test;
+import org.tdd.auctionsniper.Item;
 import org.tdd.auctionsniper.SniperPortfolio;
 import org.tdd.auctionsniper.support.AuctionSniperDriver;
 import org.tdd.auctionsniper.ui.MainWindow;
@@ -16,12 +17,12 @@ public class MainWindowIT {
 
     @Test
     public void makesUserRequestWhenJoinButtonClicked() {
-        final ValueMatcherProbe<String> buttonProbe = new ValueMatcherProbe<String>(
-                equalTo("an item-id"), "join request");
+        final ValueMatcherProbe<Item> itemProbe = new ValueMatcherProbe<Item>(equalTo(new Item(
+                "an item-id", 789)), "item request");
 
-        mainWindow.addUserRequestListener(itemid -> buttonProbe.setReceivedValue(itemid));
+        mainWindow.addUserRequestListener(item -> itemProbe.setReceivedValue(item));
 
-        driver.startBiddingFor("an item-id", Integer.MAX_VALUE);
-        driver.check(buttonProbe);
+        driver.startBiddingFor("an item-id", 789);
+        driver.check(itemProbe);
     }
 }

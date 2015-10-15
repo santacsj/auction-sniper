@@ -5,8 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import org.jmock.example.announcer.Announcer;
-import org.tdd.auctionsniper.Main;
-import org.tdd.auctionsniper.SniperPortfolio;
+import org.tdd.auctionsniper.*;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
