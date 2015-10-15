@@ -6,8 +6,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.*;
-import org.tdd.auctionsniper.Auction;
-import org.tdd.auctionsniper.AuctionEventListener;
+import org.tdd.auctionsniper.*;
 import org.tdd.auctionsniper.support.ApplicationRunner;
 import org.tdd.auctionsniper.support.FakeAuctionServer;
 import org.tdd.auctionsniper.xmpp.XMPPAuctionHouse;
@@ -34,7 +33,8 @@ public class XMPPAuctionHouseIT {
     public void receivesEventsFromAuctionServerAfterJoining() throws Exception {
         CountDownLatch autionWasClosed = new CountDownLatch(1);
 
-        Auction auction = auctionHouse.auctionFor(auctionServer.getItemId());
+        Auction auction = auctionHouse.auctionFor(new Item(auctionServer.getItemId(),
+                Integer.MAX_VALUE));
         auction.addAuctionEventListener(auctionClosedListener(autionWasClosed));
 
         auctionServer.startSellingItem();

@@ -22,9 +22,16 @@ public class ApplicationRunner extends ExternalResource {
         startSniper();
         for (FakeAuctionServer auction : auctions) {
             String itemId = auction.getItemId();
-            driver.startBiddingFor(itemId);
+            driver.startBiddingFor(itemId, Integer.MAX_VALUE);
             driver.showsSniperStatus(itemId, 0, 0, SnipersTableModel.textFor(SniperState.JOINING));
         }
+    }
+
+    public void startBiddingWithStopPrice(FakeAuctionServer auction, int stopPrice) {
+        startSniper();
+        String itemId = auction.getItemId();
+        driver.startBiddingFor(itemId, stopPrice);
+        driver.showsSniperStatus(itemId, 0, 0, SnipersTableModel.textFor(SniperState.JOINING));
     }
 
     private void startSniper() {
@@ -84,6 +91,11 @@ public class ApplicationRunner extends ExternalResource {
 
     }
 
+    public void hasShownSniperIsLosing(FakeAuctionServer auction, int lastPrice, int lastBid) {
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid,
+                SnipersTableModel.textFor(SniperState.LOSING));
+    }
+
     public void showsSniperHasWonAuction(FakeAuctionServer auction, int lastPrice) {
         driver.showsSniperStatus(auction.getItemId(), lastPrice, lastPrice,
                 SnipersTableModel.textFor(SniperState.WON));
@@ -97,6 +109,11 @@ public class ApplicationRunner extends ExternalResource {
     @Override
     protected void after() {
         stop();
+    }
+
+    public void showsSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
+        // TODO Auto-generated method stub
+
     }
 
 }
