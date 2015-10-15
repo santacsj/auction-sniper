@@ -10,7 +10,8 @@ import org.tdd.auctionsniper.*;
 @SuppressWarnings("serial")
 public class SnipersTableModel extends AbstractTableModel implements SniperListener,
         PortfolioListener {
-    private static final String[] STATUS_TEXT = { "Joining", "Bidding", "Winning", "Lost", "Won" };
+    private static final String[] STATUS_TEXT = { "Joining", "Bidding", "Winning", "Losing",
+            "Lost", "Won" };
     public static final SniperSnapshot JOINING = SniperSnapshot.joining("");
 
     public static String textFor(SniperState state) {

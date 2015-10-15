@@ -25,6 +25,14 @@ public enum SniperState {
         }
 
     },
+    LOSING {
+
+        @Override
+        public SniperState whenAuctionClosed() {
+            return LOST;
+        }
+
+    },
     LOST, WON;
 
     public SniperState whenAuctionClosed() {
