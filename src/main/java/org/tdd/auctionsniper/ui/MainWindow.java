@@ -45,10 +45,20 @@ public class MainWindow extends JFrame {
 
     private JPanel makeControls() {
         JPanel controls = new JPanel(new FlowLayout());
+
+        controls.add(new JLabel("Item:"));
+
         final JTextField itemIdField = new JTextField();
-        itemIdField.setColumns(25);
+        itemIdField.setColumns(9);
         itemIdField.setName(NEW_ITEM_ID_NAME);
         controls.add(itemIdField);
+
+        controls.add(new JLabel("Stop price:"));
+
+        final JFormattedTextField stopPriceField = new JFormattedTextField();
+        stopPriceField.setColumns(7);
+        stopPriceField.setName(NEW_ITEM_STOP_PRICE_NAME);
+        controls.add(stopPriceField);
 
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_BUTTON_NAME);

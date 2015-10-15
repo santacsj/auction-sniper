@@ -92,7 +92,7 @@ public class ApplicationRunner extends ExternalResource {
     }
 
     public void hasShownSniperIsLosing(FakeAuctionServer auction, int lastPrice, int lastBid) {
-        driver.showsSniperStatus(auction.getItemId(), lastBid, lastBid,
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid,
                 SnipersTableModel.textFor(SniperState.LOSING));
     }
 
