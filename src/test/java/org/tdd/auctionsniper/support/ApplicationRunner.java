@@ -101,6 +101,21 @@ public class ApplicationRunner extends ExternalResource {
                 SnipersTableModel.textFor(SniperState.WON));
     }
 
+    public void showsSniperHasFailed(FakeAuctionServer auction) {
+        driver.showsSniperStatus(auction.getItemId(), 0, 0,
+                SnipersTableModel.textFor(SniperState.FAILED));
+    }
+
+    public void showsSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid,
+                SnipersTableModel.textFor(SniperState.LOST));
+    }
+
+    public void reportsInvalidMessage(FakeAuctionServer auction, String brokenMessage) {
+        // TODO Auto-generated method stub
+
+    }
+
     public void stop() {
         if (driver != null)
             driver.dispose();
@@ -109,11 +124,6 @@ public class ApplicationRunner extends ExternalResource {
     @Override
     protected void after() {
         stop();
-    }
-
-    public void showsSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
-        // TODO Auto-generated method stub
-
     }
 
 }
