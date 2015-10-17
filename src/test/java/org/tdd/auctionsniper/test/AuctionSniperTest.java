@@ -134,6 +134,32 @@ public class AuctionSniperTest {
     // TODO continuesToBeLosingOnceStopPriceHasBeenReached()
     // TODO doesNotBidAndReportsLosingIfPriceAfterWinningIsAboveStopPrice()
 
+    @Test
+    public void reportsFailedIfAuctionFailsWhenBidding() {
+        ignoringAuction();
+        allowingSniperBidding();
+
+        expectSniperToFailWhenItIs("bidding");
+
+        sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
+        sniper.auctionFailed();
+    }
+
+    private void expectSniperToFailWhenItIs(String state) {
+        context.checking(new Expectations() {
+            {
+                atLeast(1).of(sniperListener).sniperStateChanged(
+                        new SniperSnapshot(ITEM_ID, 0, 0, SniperState.FAILED));
+                when(sniperState.is(state));
+            }
+        });
+    }
+
+    private void ignoringAuction() {
+        // TODO Auto-generated method stub
+
+    }
+
     private void allowingSniperBidding() {
         context.checking(new Expectations() {
             {
