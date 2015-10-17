@@ -76,4 +76,33 @@ public class AuctionMessageTranslatorTest {
         translator.processMessage(UNUSED_CHAT, message);
     }
 
+    @Test
+    public void notifiesAuctionFailedWhenEventTypeMissing() {
+        context.checking(new Expectations() {
+            {
+                exactly(1).of(listener).auctionFailed();
+            }
+        });
+        Message message = new Message();
+        message.setBody("SOLVersion: 1.1; CurrentPrice: 234; Increment: 5; Bidder: " + SNIPER_ID
+                + ";");
+        translator.processMessage(UNUSED_CHAT, message);
+    }
+
+    /*
+     * Note: The book implies to test the missing event type or current price.
+     * In reality, in both of these cases the translator will throw some kind of an exception without any additional
+     * code, except for Bidder.
+     */
+    @Test
+    public void notifiesAuctionFailedWhenBidderMissing() {
+        context.checking(new Expectations() {
+            {
+                exactly(1).of(listener).auctionFailed();
+            }
+        });
+        Message message = new Message();
+        message.setBody("SOLVersion: 1.1; Event: PRICE; CurrentPrice: 234; Increment: 5;");
+        translator.processMessage(UNUSED_CHAT, message);
+    }
 }
