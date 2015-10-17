@@ -40,6 +40,12 @@ public class AuctionSniper implements AuctionEventListener {
         notifyChange();
     }
 
+    @Override
+    public void auctionFailed() {
+        // TODO Auto-generated method stub
+
+    }
+
     private void notifyChange() {
         sniperListeners.announce().sniperStateChanged(snapshot);
     }

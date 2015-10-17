@@ -6,7 +6,7 @@ import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
-import org.tdd.auctionsniper.*;
+import org.tdd.auctionsniper.AuctionEventListener;
 import org.tdd.auctionsniper.AuctionEventListener.PriceSource;
 import org.tdd.auctionsniper.xmpp.AuctionMessageTranslator;
 
@@ -58,6 +58,20 @@ public class AuctionMessageTranslatorTest {
         Message message = new Message();
         message.setBody("SOLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: "
                 + SNIPER_ID + ";");
+
+        translator.processMessage(UNUSED_CHAT, message);
+    }
+
+    @Test
+    public void notifiesAuctionFailedWhenBadMessageReceived() {
+        context.checking(new Expectations() {
+            {
+                exactly(1).of(listener).auctionFailed();
+            }
+        });
+
+        Message message = new Message();
+        message.setBody("a bad message");
 
         translator.processMessage(UNUSED_CHAT, message);
     }
