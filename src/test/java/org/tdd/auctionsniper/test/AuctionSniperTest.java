@@ -156,8 +156,11 @@ public class AuctionSniperTest {
     }
 
     private void ignoringAuction() {
-        // TODO Auto-generated method stub
-
+        context.checking(new Expectations() {
+            {
+                ignoring(auction);
+            }
+        });
     }
 
     private void allowingSniperBidding() {
