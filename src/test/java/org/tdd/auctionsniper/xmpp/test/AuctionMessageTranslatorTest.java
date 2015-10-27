@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.tdd.auctionsniper.AuctionEventListener;
 import org.tdd.auctionsniper.AuctionEventListener.PriceSource;
 import org.tdd.auctionsniper.xmpp.AuctionMessageTranslator;
+import org.tdd.auctionsniper.xmpp.XMPPFailureReporter;
 
 public class AuctionMessageTranslatorTest {
 
@@ -19,8 +20,9 @@ public class AuctionMessageTranslatorTest {
     public final JUnitRuleMockery context = new JUnitRuleMockery();
 
     private final AuctionEventListener listener = context.mock(AuctionEventListener.class);
+    private final XMPPFailureReporter failureReporter = context.mock(XMPPFailureReporter.class);
     private final AuctionMessageTranslator translator = new AuctionMessageTranslator(SNIPER_ID,
-            listener);
+            listener, failureReporter);
 
     @Test
     public void notifiesAuctionClosedWhenCloseMessageReceived() {
@@ -64,29 +66,33 @@ public class AuctionMessageTranslatorTest {
 
     @Test
     public void notifiesAuctionFailedWhenBadMessageReceived() {
+        String badMessage = "a bad message";
+        expectFailureMessage(badMessage);
+        translator.processMessage(UNUSED_CHAT, message(badMessage));
+    }
+
+    private Message message(String badMessage) {
+        Message message = new Message();
+        message.setBody(badMessage);
+        return message;
+    }
+
+    private void expectFailureMessage(String badMessage) {
         context.checking(new Expectations() {
             {
-                exactly(1).of(listener).auctionFailed();
+                oneOf(listener).auctionFailed();
+                oneOf(failureReporter).cannotTranslateMessage(with(SNIPER_ID), with(badMessage),
+                        with(any(Exception.class)));
             }
         });
-
-        Message message = new Message();
-        message.setBody("a bad message");
-
-        translator.processMessage(UNUSED_CHAT, message);
     }
 
     @Test
     public void notifiesAuctionFailedWhenEventTypeMissing() {
-        context.checking(new Expectations() {
-            {
-                exactly(1).of(listener).auctionFailed();
-            }
-        });
-        Message message = new Message();
-        message.setBody("SOLVersion: 1.1; CurrentPrice: 234; Increment: 5; Bidder: " + SNIPER_ID
-                + ";");
-        translator.processMessage(UNUSED_CHAT, message);
+        String badMessage = "SOLVersion: 1.1; CurrentPrice: 234; Increment: 5; Bidder: "
+                + SNIPER_ID + ";";
+        expectFailureMessage(badMessage);
+        translator.processMessage(UNUSED_CHAT, message(badMessage));
     }
 
     /*
@@ -96,13 +102,8 @@ public class AuctionMessageTranslatorTest {
      */
     @Test
     public void notifiesAuctionFailedWhenBidderMissing() {
-        context.checking(new Expectations() {
-            {
-                exactly(1).of(listener).auctionFailed();
-            }
-        });
-        Message message = new Message();
-        message.setBody("SOLVersion: 1.1; Event: PRICE; CurrentPrice: 234; Increment: 5;");
-        translator.processMessage(UNUSED_CHAT, message);
+        String badMessage = "SOLVersion: 1.1; Event: PRICE; CurrentPrice: 234; Increment: 5;";
+        expectFailureMessage(badMessage);
+        translator.processMessage(UNUSED_CHAT, message(badMessage));
     }
 }
