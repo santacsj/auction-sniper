@@ -58,6 +58,12 @@ public class XMPPAuctionHouseIT {
                 // not implemented
             }
 
+            @Override
+            public void auctionFailed() {
+                // TODO Auto-generated method stub
+
+            }
+
         };
     }
 }

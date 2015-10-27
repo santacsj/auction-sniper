@@ -50,13 +50,18 @@ public class FakeAuctionServer extends ExternalResource {
     }
 
     public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
-        receivesAMessageMatching(sniperId, equalTo(String.format(XMPPAuction.BID_COMMAND_FORMAT, bid)));
+        receivesAMessageMatching(sniperId,
+                equalTo(String.format(XMPPAuction.BID_COMMAND_FORMAT, bid)));
     }
 
     private void receivesAMessageMatching(String sniperId, Matcher<? super String> messageMatcher)
             throws InterruptedException {
         messageListener.receivesAMessage(messageMatcher);
         Assert.assertThat(currentChat.getParticipant(), equalTo(sniperId));
+    }
+
+    public void sendInvalidMessageContaning(String brokenMessage) throws XMPPException {
+        currentChat.sendMessage(brokenMessage);
     }
 
     public void stop() {

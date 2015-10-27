@@ -1,6 +1,9 @@
 package org.tdd.auctionsniper.support;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.tdd.auctionsniper.support.FakeAuctionServer.*;
+
+import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 
@@ -17,24 +20,28 @@ public class ApplicationRunner extends ExternalResource {
             + "/" + FakeAuctionServer.AUCTION_RESOURCE;
 
     private AuctionSniperDriver driver;
+    private AuctionLogDriver logDriver = new AuctionLogDriver();
 
     public void startBiddingIn(FakeAuctionServer... auctions) {
         startSniper();
         for (FakeAuctionServer auction : auctions) {
-            String itemId = auction.getItemId();
-            driver.startBiddingFor(itemId, Integer.MAX_VALUE);
-            driver.showsSniperStatus(itemId, 0, 0, SnipersTableModel.textFor(SniperState.JOINING));
+            openBiddingFor(auction, Integer.MAX_VALUE);
         }
     }
 
     public void startBiddingWithStopPrice(FakeAuctionServer auction, int stopPrice) {
         startSniper();
+        openBiddingFor(auction, stopPrice);
+    }
+
+    private void openBiddingFor(FakeAuctionServer auction, int stopPrice) {
         String itemId = auction.getItemId();
         driver.startBiddingFor(itemId, stopPrice);
         driver.showsSniperStatus(itemId, 0, 0, SnipersTableModel.textFor(SniperState.JOINING));
     }
 
     private void startSniper() {
+        logDriver.clearLog();
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
@@ -101,6 +108,21 @@ public class ApplicationRunner extends ExternalResource {
                 SnipersTableModel.textFor(SniperState.WON));
     }
 
+    public void showsSniperHasFailed(FakeAuctionServer auction) {
+        driver.showsSniperStatus(auction.getItemId(), 0, 0,
+                SnipersTableModel.textFor(SniperState.FAILED));
+    }
+
+    public void showsSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
+        driver.showsSniperStatus(auction.getItemId(), lastPrice, lastBid,
+                SnipersTableModel.textFor(SniperState.LOST));
+    }
+
+    public void reportsInvalidMessage(FakeAuctionServer auction, String brokenMessage)
+            throws IOException {
+        logDriver.hasEntry(containsString(brokenMessage));
+    }
+
     public void stop() {
         if (driver != null)
             driver.dispose();
@@ -109,11 +131,6 @@ public class ApplicationRunner extends ExternalResource {
     @Override
     protected void after() {
         stop();
-    }
-
-    public void showsSniperHasLostAuction(FakeAuctionServer auction, int lastPrice, int lastBid) {
-        // TODO Auto-generated method stub
-
     }
 
 }

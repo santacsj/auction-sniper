@@ -1,10 +1,14 @@
 package org.tdd.auctionsniper.xmpp;
 
+import java.util.logging.*;
+
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.tdd.auctionsniper.*;
 
 public class XMPPAuctionHouse implements AuctionHouse {
+
+    public static final String LOG_FILE_NAME = "auction-sniper.log";
 
     private static final String AUCTION_RESOURCE = "Auction";
 
@@ -30,14 +34,33 @@ public class XMPPAuctionHouse implements AuctionHouse {
     }
 
     private final XMPPConnection connection;
+    private final XMPPFailureReporter failureReporter;
 
-    public XMPPAuctionHouse(XMPPConnection connection) {
+    public XMPPAuctionHouse(XMPPConnection connection) throws XMPPAuctionException {
         this.connection = connection;
+        this.failureReporter = new LoggingXMPPFailureReporter(makeLogger());
+    }
+
+    private Logger makeLogger() throws XMPPAuctionException {
+        Logger logger = Logger.getLogger(XMPPAuctionHouse.LOG_FILE_NAME);
+        logger.setUseParentHandlers(false);
+        logger.addHandler(simpleFileHandler());
+        return logger;
+    }
+
+    private Handler simpleFileHandler() throws XMPPAuctionException {
+        try {
+            FileHandler handler = new FileHandler(XMPPAuctionHouse.LOG_FILE_NAME);
+            return handler;
+        } catch (Exception e) {
+            throw new XMPPAuctionException("Could not create logger FileHandler "
+                    + XMPPAuctionHouse.LOG_FILE_NAME, e);
+        }
     }
 
     @Override
     public Auction auctionFor(Item item) {
-        return new XMPPAuction(connection, auctionId(item.identifier, connection));
+        return new XMPPAuction(connection, auctionId(item.identifier, connection), failureReporter);
     }
 
     @Override

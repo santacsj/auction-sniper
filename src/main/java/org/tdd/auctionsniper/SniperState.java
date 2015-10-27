@@ -33,7 +33,7 @@ public enum SniperState {
         }
 
     },
-    LOST, WON;
+    LOST, WON, FAILED;
 
     public SniperState whenAuctionClosed() {
         throw new Defect("Auction is already closed");
