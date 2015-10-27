@@ -3,7 +3,6 @@ package org.tdd.auctionsniper.xmpp;
 import java.util.logging.Logger;
 
 public class LoggingXMPPFailureReporter implements XMPPFailureReporter {
-
     private final Logger logger;
 
     public LoggingXMPPFailureReporter(Logger logger) {

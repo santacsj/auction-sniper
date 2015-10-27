@@ -9,10 +9,10 @@ import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 
 import org.hamcrest.Matcher;
+import org.tdd.auctionsniper.xmpp.XMPPAuctionHouse;
 
 public class AuctionLogDriver {
-    public static final String LOG_FILE_NAME = "auction-sniper.log";
-    private final File logFile = new File(LOG_FILE_NAME);
+    private final File logFile = new File(XMPPAuctionHouse.LOG_FILE_NAME);
 
     public void hasEntry(Matcher<String> matcher) throws IOException {
         assertThat(readFileToString(logFile), matcher);
